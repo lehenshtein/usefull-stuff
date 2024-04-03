@@ -1,0 +1,15 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
