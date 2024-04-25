@@ -11,7 +11,7 @@ import { items } from '@shared/helpers/menu-items.helper';
   standalone: true,
   imports: [RouterOutlet, ButtonModule, MenubarModule, InputTextModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   items: MenuItem[] = items;
