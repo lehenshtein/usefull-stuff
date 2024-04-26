@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Auth,
   User,
@@ -14,13 +14,12 @@ import { IAuthCredentials } from '../models/auth-credentials.interface';
   providedIn: 'root',
 })
 export class AuthService {
+  private auth = inject(Auth);
+
   private userSubject = new BehaviorSubject<User | null>(null);
   user$ = this.userSubject.asObservable();
 
-  constructor(private auth: Auth) {}
-
-  // Subscribe in app component to listen to user changes
-  isAuthenticated(): Observable<User | null> {
+  getUser(): Observable<User | null> {
     return authState(this.auth).pipe(
       tap((user) => {
         this.userSubject.next(user);
