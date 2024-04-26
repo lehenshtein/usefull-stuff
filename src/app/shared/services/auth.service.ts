@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import {
   Auth,
   User,
@@ -7,7 +7,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
-import { BehaviorSubject, Observable, from, map, tap } from 'rxjs';
+import { Observable, from, map, tap } from 'rxjs';
 import { IAuthCredentials } from '../models/auth-credentials.interface';
 
 @Injectable({
@@ -16,13 +16,13 @@ import { IAuthCredentials } from '../models/auth-credentials.interface';
 export class AuthService {
   private auth = inject(Auth);
 
-  private userSubject = new BehaviorSubject<User | null>(null);
-  user$ = this.userSubject.asObservable();
+  private userSignal = signal<User | null>(null);
+  user = computed(this.userSignal);
 
   getUser(): Observable<User | null> {
     return authState(this.auth).pipe(
       tap((user) => {
-        this.userSubject.next(user);
+        this.userSignal.set(user);
       })
     );
   }
