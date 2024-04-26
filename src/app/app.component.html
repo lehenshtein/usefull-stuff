@@ -13,11 +13,3 @@
 </p-menubar>
 <p-button label="Submit"></p-button>
 <router-outlet></router-outlet>
-
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <input type="text" formControlName="email" />
-  <br />
-  <br />
-  <input type="password" formControlName="password" />
-  <button type="submit">register</button>
-</form>

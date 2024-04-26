@@ -4,8 +4,10 @@ import {
   User,
   authState,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
 } from '@angular/fire/auth';
-import { BehaviorSubject, Observable, from, map } from 'rxjs';
+import { BehaviorSubject, Observable, from, map, tap } from 'rxjs';
 import { IAuthCredentials } from '../models/auth-credentials.interface';
 
 @Injectable({
@@ -17,15 +19,28 @@ export class AuthService {
 
   constructor(private auth: Auth) {}
 
-  checkIfUserIsAuthenticated() {
-    authState(this.auth).subscribe((user) => {
-      this.userSubject.next(user);
-    });
+  // Subscribe in app component to listen to user changes
+  isAuthenticated(): Observable<User | null> {
+    return authState(this.auth).pipe(
+      tap((user) => {
+        this.userSubject.next(user);
+      })
+    );
   }
 
   register({ email, password }: IAuthCredentials): Observable<User> {
     return from(
       createUserWithEmailAndPassword(this.auth, email, password)
     ).pipe(map((credentials) => credentials.user));
+  }
+
+  login({ email, password }: IAuthCredentials): Observable<User> {
+    return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
+      map((credentials) => credentials.user)
+    );
+  }
+
+  logout(): Observable<void> {
+    return from(signOut(this.auth));
   }
 }
