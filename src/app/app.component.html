@@ -8,8 +8,8 @@
     />
   </ng-template>
   <ng-template pTemplate="end">
-    <input type="text" pInputText placeholder="Search" />
+    <p-button label="Sign In" (onClick)="showModal()"></p-button>
   </ng-template>
 </p-menubar>
-<p-button label="Submit"></p-button>
+<app-sign-in-modal></app-sign-in-modal>
 <router-outlet></router-outlet>

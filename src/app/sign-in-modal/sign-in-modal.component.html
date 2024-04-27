@@ -1,0 +1,25 @@
+<p-dialog
+  header="Choose Sign In Option"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="closeModal()"
+>
+  <p-tabView
+    [style]="{
+      display: 'flex',
+      'justify-content': 'center',
+      'flex-direction': 'column',
+      'align-items': 'center'
+    }"
+  >
+    <p-tabPanel header="Log In"> 
+      some login content
+    </p-tabPanel>
+    <p-tabPanel header="Register"> 
+      some register content
+    </p-tabPanel>
+  </p-tabView>
+</p-dialog>
