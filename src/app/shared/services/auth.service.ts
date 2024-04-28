@@ -1,3 +1,4 @@
+import { ErrorMessageService } from './error-message.service';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import {
   Auth,
@@ -7,7 +8,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
-import { Observable, from, map, tap } from 'rxjs';
+import { Observable, catchError, from, map, tap } from 'rxjs';
 import { IAuthCredentials } from '../models/auth-credentials.interface';
 
 @Injectable({
@@ -15,6 +16,7 @@ import { IAuthCredentials } from '../models/auth-credentials.interface';
 })
 export class AuthService {
   private auth = inject(Auth);
+  private errorMessageService = inject(ErrorMessageService);
 
   private userSignal = signal<User | null>(null);
   user = computed(this.userSignal);
@@ -30,12 +32,20 @@ export class AuthService {
   register({ email, password }: IAuthCredentials): Observable<User> {
     return from(
       createUserWithEmailAndPassword(this.auth, email, password)
-    ).pipe(map((credentials) => credentials.user));
+    ).pipe(
+      map((credentials) => credentials.user),
+      catchError((error) => {
+        return this.errorMessageService.handleError(error);
+      })
+    );
   }
 
   login({ email, password }: IAuthCredentials): Observable<User> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      map((credentials) => credentials.user)
+      map((credentials) => credentials.user),
+      catchError((error) => {
+        return this.errorMessageService.handleError(error);
+      })
     );
   }
 
