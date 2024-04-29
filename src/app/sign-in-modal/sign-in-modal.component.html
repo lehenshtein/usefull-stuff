@@ -2,7 +2,7 @@
   header="Choose Sign In Option"
   [(visible)]="visible"
   [modal]="true"
-  [style]="{ width: '500px' }"
+  [style]="{ width: '500px', height: '490px' }"
   [draggable]="false"
   [resizable]="false"
   (onHide)="closeModal()"
@@ -12,14 +12,73 @@
       display: 'flex',
       'justify-content': 'center',
       'flex-direction': 'column',
-      'align-items': 'center'
+      'align-items': 'center',
     }"
   >
-    <p-tabPanel header="Log In"> 
-      some login content
+    <p-tabPanel header="Log In" [style]="{ width: '100%' }">
+      <h3>If you have an existing account</h3>
+      <form [formGroup]="userLoginGroup">
+        <span class="p-float-label">
+          <input
+            type="text"
+            pInputText
+            id="email"
+            placeholder="example@email.com"
+            formControlName="email"
+          />
+          <label for="email">Email</label>
+        </span>
+
+        <span class="p-float-label">
+          <input
+            type="loginPassword"
+            pInputText
+            id="password"
+            placeholder="Should have at least 8 characters"
+            formControlName="password"
+          />
+          <label for="loginPassword">Password</label>
+        </span>
+      </form>
+
+      <p-button
+        label="Log In"
+        (onClick)="loginUser()"
+        [style]="{ margin: '14px 0' }"
+      ></p-button>
     </p-tabPanel>
-    <p-tabPanel header="Register"> 
-      some register content
+
+    <p-tabPanel header="Register">
+      <h3>Or register if you are new here</h3>
+      <form [formGroup]="userRegisterGroup">
+        <span class="p-float-label">
+          <input
+            type="text"
+            pInputText
+            id="email"
+            placeholder="example@email.com"
+            formControlName="email"
+          />
+          <label for="email">Email</label>
+        </span>
+
+        <span class="p-float-label">
+          <input
+            type="registerPassword"
+            pInputText
+            id="password"
+            placeholder="Should have at least 8 characters"
+            formControlName="password"
+          />
+          <label for="registerPassword">Password</label>
+        </span>
+      </form>
+
+      <p-button
+        label="Register"
+        (onClick)="registerUser()"
+        [style]="{ margin: '14px 0' }"
+      ></p-button>
     </p-tabPanel>
   </p-tabView>
 </p-dialog>

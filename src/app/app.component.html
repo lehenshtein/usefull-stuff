@@ -7,8 +7,21 @@
       class="mr-2"
     />
   </ng-template>
-  <ng-template pTemplate="end">
+  <ng-template pTemplate="end" *ngIf="!isLogged; else signOutRef">
     <p-button label="Sign In" (onClick)="showModal()"></p-button>
+  </ng-template>
+
+  <ng-template #signOutRef>
+    <div
+      [ngStyle]="{
+        display: 'flex',
+        'justify-content': 'center',
+        'align-items': 'center'
+      }"
+    >
+      <p [ngStyle]="{ margin: '0 12px' }">UserName</p>
+      <p-button label="Sign Out" (onClick)="signOut()"></p-button>
+    </div>
   </ng-template>
 </p-menubar>
 <app-sign-in-modal></app-sign-in-modal>
