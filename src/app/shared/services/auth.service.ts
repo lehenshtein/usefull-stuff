@@ -11,6 +11,7 @@ import {
 import { Observable, catchError, from, map, tap } from 'rxjs';
 import { IAuthCredentials } from '../models/auth-credentials.interface';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { LocalStorageEnum } from '../models/local-storage.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,7 @@ export class AuthService {
   user$ = user(this.auth);
 
   get token(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem(LocalStorageEnum.AuthToken);
   }
 
   setToken(token: string | null): void {
@@ -31,7 +32,7 @@ export class AuthService {
       return;
     }
 
-    localStorage.setItem('token', token);
+    localStorage.setItem(LocalStorageEnum.AuthToken, token);
   }
 
   isTokenExpired(): boolean {
@@ -69,7 +70,7 @@ export class AuthService {
   logout(): Observable<void> {
     return from(signOut(this.auth)).pipe(
       tap(() => {
-        localStorage.removeItem('token');
+        localStorage.removeItem(LocalStorageEnum.AuthToken);
       })
     );
   }
