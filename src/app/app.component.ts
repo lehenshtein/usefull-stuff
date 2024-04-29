@@ -1,5 +1,4 @@
-import { AuthService } from './shared/services/auth.service';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
@@ -21,20 +20,6 @@ import { items } from '@shared/helpers/menu-items.helper';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
-  private authService = inject(AuthService);
-
+export class AppComponent {
   items: MenuItem[] = items;
-
-  ngOnInit() {
-    this.checkTokenValidity();
-  }
-
-  private checkTokenValidity() {
-    const token = this.authService.token;
-
-    if (token && this.authService.isTokenExpired()) {
-      this.authService.logout().subscribe();
-    }
-  }
 }
