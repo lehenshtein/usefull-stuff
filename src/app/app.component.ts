@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
+import { ToastModule } from 'primeng/toast';
 import { items } from '@shared/helpers/menu-items.helper';
 import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
@@ -21,6 +22,7 @@ import { AuthService } from './shared/services/auth.service';
     ButtonModule,
     MenubarModule,
     InputTextModule,
+    ToastModule,
     RippleModule,
     DialogModule,
     SignInModalComponent,
