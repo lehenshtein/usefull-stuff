@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -6,6 +6,7 @@ import { Injectable, signal } from '@angular/core';
 export class ModalService {
   private showModalSignal = signal<boolean>(false);
   private loggedSignal = signal<boolean>(false);
+  logged = computed(this.loggedSignal);
 
   toggleModal() {
     this.showModalSignal.set(!this.showModalSignal());

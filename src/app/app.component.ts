@@ -30,24 +30,13 @@ import { AuthService } from './shared/services/auth.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
-  isLogged?: boolean;
+  isLogged = this.modalService.logged;
+  // user = this.authService.user$;
 
   items: MenuItem[] = items;
-
-  constructor() {
-    // Tried to use effect() to detect changes, it works but somehow doesn`t rerender a button in template
-    effect(() => {
-      this.isLogged = this.modalService.isLogged();
-      console.log(this.isLogged); // for debug
-    });
-  }
-
-  ngOnInit(): void {
-    this.isLogged = this.modalService.isLogged();
-  }
 
   showModal() {
     this.modalService.toggleModal();

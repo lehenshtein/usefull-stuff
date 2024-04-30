@@ -9,11 +9,10 @@
       class="mr-2"
     />
   </ng-template>
-  <ng-template pTemplate="end" *ngIf="!isLogged; else signOutRef">
+  <ng-template pTemplate="end">
+    @if (!isLogged()) {
     <p-button label="Sign In" (onClick)="showModal()"></p-button>
-  </ng-template>
-
-  <ng-template #signOutRef>
+    } @else {
     <div
       [ngStyle]="{
         display: 'flex',
@@ -24,6 +23,7 @@
       <p [ngStyle]="{ margin: '0 12px' }">UserName</p>
       <p-button label="Sign Out" (onClick)="signOut()"></p-button>
     </div>
+    }
   </ng-template>
 </p-menubar>
 <app-sign-in-modal></app-sign-in-modal>

@@ -2,7 +2,7 @@
   header="Choose Sign In Option"
   [(visible)]="visible"
   [modal]="true"
-  [style]="{ width: '500px', height: '490px' }"
+  [style]="{ width: '500px' }"
   [draggable]="false"
   [resizable]="false"
   (onHide)="closeModal()"
@@ -22,18 +22,18 @@
           <input
             type="text"
             pInputText
-            id="email"
+            id="loginEmail"
             placeholder="example@email.com"
             formControlName="email"
           />
-          <label for="email">Email</label>
+          <label for="loginEmail">Email</label>
         </span>
 
         <span class="p-float-label">
           <input
-            type="loginPassword"
+            type="password"
             pInputText
-            id="password"
+            id="loginPassword"
             placeholder="Should have at least 8 characters"
             formControlName="password"
           />
@@ -55,22 +55,33 @@
           <input
             type="text"
             pInputText
-            id="email"
+            id="registerEmail"
             placeholder="example@email.com"
             formControlName="email"
           />
-          <label for="email">Email</label>
+          <label for="registerEmail">Email</label>
         </span>
 
         <span class="p-float-label">
           <input
-            type="registerPassword"
+            type="password"
             pInputText
-            id="password"
+            id="registerPassword"
             placeholder="Should have at least 8 characters"
             formControlName="password"
           />
           <label for="registerPassword">Password</label>
+        </span>
+
+        <span class="p-float-label">
+          <input
+            type="password"
+            pInputText
+            id="repeatPassword"
+            placeholder="Should have at least 8 characters"
+            formControlName="repeatPassword"
+          />
+          <label for="repeatPassword">Repeat Password</label>
         </span>
       </form>
 

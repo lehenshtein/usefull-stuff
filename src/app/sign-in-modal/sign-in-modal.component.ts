@@ -48,6 +48,7 @@ export class SignInModalComponent implements OnInit {
     this.userRegisterGroup = this.formBuilder.group({
       email: [''],
       password: [''],
+      repeatPassword: [''],
     });
   }
 
