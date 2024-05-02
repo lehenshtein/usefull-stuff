@@ -1,19 +1,25 @@
 import { Injectable } from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from "@angular/router";
-import { Observable, map, take } from "rxjs";
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
+import { Observable, of } from "rxjs";
 import { AuthService } from "@shared/services/auth.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuardService {
+export class AuthGuardService implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
-    return this.authService.getUser().pipe(
-      take(1),
-      map(user => user ? true : this.router.createUrlTree(['/login'])),
-    );
+    return this.checkTokenValidity();
+  }
+
+  checkTokenValidity(): Observable<boolean> {
+    const token = this.authService.token;
+    if (!token) {
+      return of(false);
+    }
+    const isExpired = this.authService.isTokenExpired();
+    return of(!isExpired);
   }
 }
