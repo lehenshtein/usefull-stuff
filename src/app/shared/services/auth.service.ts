@@ -12,6 +12,7 @@ import { Observable, catchError, from, map, tap } from 'rxjs';
 import { IAuthCredentials } from '../models/auth-credentials.interface';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageEnum } from '../models/local-storage.enum';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,7 @@ import { LocalStorageEnum } from '../models/local-storage.enum';
 export class AuthService {
   private auth = inject(Auth);
   private errorMessageService = inject(ErrorMessageService);
+  private router = inject(Router);
   private jwtHelper = new JwtHelperService();
 
   user$ = user(this.auth);
@@ -37,6 +39,14 @@ export class AuthService {
 
   isTokenExpired(): boolean {
     return this.jwtHelper.isTokenExpired(this.token);
+  }
+
+  checkIfTokenIsExpired(): void {
+    if (this.token && this.isTokenExpired()) {
+      this.logout().subscribe(() => {
+        this.router.navigate(['/home']);
+      });
+    }
   }
 
   register({ email, password }: IAuthCredentials): Observable<User> {
