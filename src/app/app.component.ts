@@ -30,7 +30,7 @@ import { AuthService } from './shared/services/auth.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
   isLogged = this.modalService.logged;
@@ -55,5 +55,9 @@ export class AppComponent {
       );
     }
     this.modalService.setLoggedOut();
+  }
+
+  ngOnInit(): void {
+    this.authService.checkIfTokenIsExpired();
   }
 }
