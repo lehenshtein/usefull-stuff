@@ -1,8 +1,11 @@
 import { Routes } from '@angular/router';
-import {RoleGuardService} from "@shared/services/role-guard.service";
-import {AuthGuardService} from "@shared/services/auth-guard.service";
+import { TimezonesComponent } from '@app/pages/timezones/timezones.component';
 
 export const routes: Routes = [
+  {
+    path: 'timezones',
+    component: TimezonesComponent
+  },
   {
     path: 'admin',
     canActivate: [AuthGuardService, RoleGuardService],

@@ -1,0 +1,23 @@
+<h1>Timezone helper</h1>
+<div class="grid">
+  <div class="col">
+    <p-dropdown
+      [options]="timezones"
+      [filter]="true"
+      filterBy="value"
+      [(ngModel)]="selectedTimeZone"
+      (onChange)="setNewDate()"
+      [virtualScroll]="true"
+      [virtualScrollItemSize]="38"
+      autoWidth="false"
+      optionLabel="value"
+      placeholder="Select timezone">
+    </p-dropdown>
+  </div>
+
+  <div class="col">
+    <p>Current local date: <strong>{{ currentLocalDate | date: 'dd.MM.YYYY, HH:mm' }}</strong></p>
+    <p>Offset: <strong>{{ offset }}</strong></p>
+    <p>Date with timezone: <strong>{{ currentDateWithTimezone | date: 'dd.MM.YYYY, HH:mm' }}</strong></p>
+  </div>
+</div>
