@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { AuthService } from '@app/shared/services/auth.service';
 import { RouterLink } from '@angular/router';
 import { IAuthCredentials } from '@app/shared/models/auth-credentials.interface';
+import { ILoginGroup } from '@app/shared/models/login-group.interface';
 
 @Component({
   selector: 'app-sign-in-modal',
@@ -98,7 +99,17 @@ export class SignInModalComponent implements OnInit {
     }
   }
 
+  resetGroupValues(fg: FormGroup<ILoginGroup>) {
+    fg.patchValue({
+      email: '',
+      password: '',
+      repeatPassword: '',
+    });
+  }
+
   closeModal() {
     this.modalService.closeModal();
+    this.resetGroupValues(this.userLoginGroup);
+    this.resetGroupValues(this.userRegisterGroup);
   }
 }
