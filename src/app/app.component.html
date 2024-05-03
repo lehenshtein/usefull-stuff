@@ -10,8 +10,23 @@
     />
   </ng-template>
   <ng-template pTemplate="end">
-    <input type="text" pInputText placeholder="Search" />
+    @if (!isLogged()) {
+    <p-button label="Sign In" (onClick)="showModal()"></p-button>
+    } @else {
+    <div
+      [ngStyle]="{
+        display: 'flex',
+        'justify-content': 'center',
+        'align-items': 'center'
+      }"
+    >
+      <p [ngStyle]="{ margin: '0 12px' }">UserName</p>
+      <p-button label="Sign Out" (onClick)="signOut()"></p-button>
+    </div>
+    }
   </ng-template>
 </p-menubar>
-<p-button label="Submit"></p-button>
-<router-outlet></router-outlet>
+<div class="main-wrapper">
+  <app-sign-in-modal></app-sign-in-modal>
+  <router-outlet></router-outlet>
+</div>
