@@ -38,6 +38,10 @@ export class AppComponent implements OnInit {
 
   items: MenuItem[] = items;
 
+  ngOnInit(): void {
+    this.authService.checkIfTokenIsExpired();
+  }
+
   showModal() {
     this.modalService.toggleModal();
   }
@@ -55,9 +59,5 @@ export class AppComponent implements OnInit {
       );
     }
     this.modalService.setLoggedOut();
-  }
-
-  ngOnInit(): void {
-    this.authService.checkIfTokenIsExpired();
   }
 }
