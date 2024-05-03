@@ -40,7 +40,7 @@ export class AuthService {
 
   user$ = user(this.auth);
 
-  private userSignal = signal<User | null | undefined>(undefined);
+  private userSignal = signal<User | null>(null);
   user = computed(this.userSignal);
 
   get token(): string | null {
