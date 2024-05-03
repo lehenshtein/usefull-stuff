@@ -39,6 +39,7 @@ export class AppComponent implements OnInit {
   items: MenuItem[] = items;
 
   ngOnInit(): void {
+    this.authService.userChanges();
     this.authService.checkIfTokenIsExpired();
   }
 
