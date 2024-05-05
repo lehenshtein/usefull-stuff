@@ -29,16 +29,20 @@
           <label for="loginEmail">Email</label>
         </span>
 
-        <span class="p-float-label">
-          <input
-            type="password"
-            pInputText
+        <p-floatLabel class="p-float-label">
+          <p-password
             id="loginPassword"
+            [toggleMask]="true"
             placeholder="Should have at least 8 characters"
+            promptLabel="Choose a password"
+            weakLabel="Don`t be a fool"
+            mediumLabel="Not bad"
+            strongLabel="Excellent"
             formControlName="password"
           />
+
           <label for="loginPassword">Password</label>
-        </span>
+        </p-floatLabel>
       </form>
 
       <p-button
@@ -62,27 +66,32 @@
           <label for="registerEmail">Email</label>
         </span>
 
-        <span class="p-float-label">
-          <input
-            type="password"
-            pInputText
+        <p-floatLabel class="p-float-label">
+          <p-password
             id="registerPassword"
+            [toggleMask]="true"
             placeholder="Should have at least 8 characters"
+            promptLabel="Choose a password"
+            weakLabel="Don`t be a fool"
+            mediumLabel="Not bad"
+            strongLabel="Excellent"
             formControlName="password"
           />
-          <label for="registerPassword">Password</label>
-        </span>
 
-        <span class="p-float-label">
-          <input
-            type="password"
-            pInputText
+          <label for="loginPassword">Password</label>
+        </p-floatLabel>
+
+        <p-floatLabel class="p-float-label">
+          <p-password
             id="repeatPassword"
-            placeholder="Should repeat your password"
+            placeholder="Should have at least 8 characters"
+            [feedback]="false"
+            [toggleMask]="true"
             formControlName="repeatPassword"
           />
+
           <label for="repeatPassword">Repeat Password</label>
-        </span>
+        </p-floatLabel>
       </form>
 
       <p-button

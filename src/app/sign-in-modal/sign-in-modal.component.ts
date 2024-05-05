@@ -1,15 +1,24 @@
 import { Component, OnInit, effect, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { ModalService } from '@app/shared/services/modal.service';
 import { DialogModule } from 'primeng/dialog';
 import { TabViewModule } from 'primeng/tabview';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '@app/shared/services/auth.service';
 import { RouterLink } from '@angular/router';
 import { IAuthCredentials } from '@app/shared/models/auth-credentials.interface';
 import { ILoginGroup } from '@app/shared/models/login-group.interface';
+import { compareValidator } from '@app/shared/validators/compare.validator';
 
 @Component({
   selector: 'app-sign-in-modal',
@@ -19,6 +28,9 @@ import { ILoginGroup } from '@app/shared/models/login-group.interface';
     TabViewModule,
     ReactiveFormsModule,
     InputTextModule,
+    PasswordModule,
+    FloatLabelModule,
+    DividerModule,
     ButtonModule,
     RouterLink,
   ],
@@ -42,15 +54,51 @@ export class SignInModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.userLoginGroup = this.formBuilder.group({
-      email: [''],
-      password: [''],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.email,
+          Validators.pattern(/^(?=.*[a-zA-Z]).+$/),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).+$/),
+        ],
+      ],
     });
 
     this.userRegisterGroup = this.formBuilder.group({
-      email: [''],
-      password: [''],
-      repeatPassword: [''],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.email,
+          Validators.pattern(/^(?=.*[a-zA-Z]).+$/),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).+$/),
+        ],
+      ],
+      repeatPassword: ['', [Validators.required]],
     });
+
+    this.userRegisterGroup
+      .get('repeatPassword')
+      ?.setValidators(compareValidator(this.userRegisterGroup.get('password')));
+
+    this.userRegisterGroup.updateValueAndValidity();
   }
 
   userLoginCred(): IAuthCredentials {
