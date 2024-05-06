@@ -48,12 +48,6 @@ export class SignInModalComponent implements OnInit {
   userLoginGroup!: FormGroup;
   userRegisterGroup!: FormGroup;
 
-  constructor() {
-    effect(() => {
-      this.visible = this.modalService.isVisible();
-    });
-  }
-
   ngOnInit(): void {
     this.userLoginGroup = this.formBuilder.group({
       email: [
@@ -120,7 +114,7 @@ export class SignInModalComponent implements OnInit {
   loginUser() {
     try {
       this.authService.login(this.userLoginCred()).subscribe((user) => {
-        console.log('User logged in: ', user);
+        console.log('User logged in: ', user); // for debug
         this.modalService.setLogged();
       });
 

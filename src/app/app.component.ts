@@ -12,6 +12,7 @@ import { SignInModalComponent } from './sign-in-modal/sign-in-modal.component';
 import { ModalService } from './shared/services/modal.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './shared/services/auth.service';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ import { AuthService } from './shared/services/auth.service';
     DialogModule,
     SignInModalComponent,
   ],
+  providers: [ModalService, DialogService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -39,13 +41,13 @@ export class AppComponent implements OnInit {
   items: MenuItem[] = items;
 
   showModal() {
-    this.modalService.toggleModal();
+    this.modalService.showModal(SignInModalComponent, 'Choose Sign In Option');
   }
 
   signOut() {
     try {
       this.authService.logout().subscribe((user) => {
-        console.log('User logged out: ', user);
+        console.log('User logged out: ', user); // for debug
         this.modalService.setLoggedOut();
       });
     } catch (error) {
