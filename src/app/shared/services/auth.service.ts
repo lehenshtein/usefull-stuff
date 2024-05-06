@@ -25,7 +25,13 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageEnum } from '../models/local-storage.enum';
 import { Router } from '@angular/router';
 import { getIdTokenResult } from 'firebase/auth';
-import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  doc,
+  docData,
+  setDoc,
+} from '@angular/fire/firestore';
 import { IUser } from '../models/user.interface';
 
 @Injectable({
@@ -77,7 +83,7 @@ export class AuthService {
     localStorage.setItem(LocalStorageEnum.AuthToken, token);
   }
 
-  setUser(user: IUser): void {
+  setUser(user: IUser | undefined): void {
     if (!user) {
       return;
     }
@@ -125,18 +131,22 @@ export class AuthService {
         ).pipe(map(() => userData));
       }),
       tap((userData) => {
-        console.log('user data', userData);
         this.setUser(userData);
       })
     );
   }
 
-  login({ email, password }: IAuthCredentials): Observable<User> {
+  login({ email, password }: IAuthCredentials): Observable<IUser | undefined> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      map((credentials) => credentials.user),
-      tap(async (user) => {
+      tap(async ({ user }) => {
         const token = await user.getIdToken(true);
         this.setToken(token);
+      }),
+      switchMap(({ user }) => {
+        return this.getUserData(user.uid);
+      }),
+      tap((userData) => {
+        this.setUser(userData);
       }),
       catchError((error) => {
         return this.errorMessageService.handleError(error);
@@ -150,6 +160,11 @@ export class AuthService {
         this.clearLocalStorage();
       })
     );
+  }
+
+  getUserData(uid: string): Observable<IUser | undefined> {
+    const userDoc = doc(this.fs, 'users', uid);
+    return docData(userDoc) as Observable<IUser | undefined>;
   }
 
   private clearLocalStorage(): void {
