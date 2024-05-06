@@ -39,10 +39,12 @@
   </ng-template>
   <ng-template pTemplate="body" let-user>
     <tr>
-      <td>{{ user.email }}</td>
-      <td>{{ user.roles.length ? user.roles.join(", ") : "No role" }}</td>
-      <td>{{ user.uid }}</td>
-      <td>
+      <td class="p-2">{{ user.email }}</td>
+      <td class="p-2">
+        {{ user.roles.length ? user.roles.join(", ") : "No role" }}
+      </td>
+      <td class="p-2">{{ user.uid }}</td>
+      <td class="p-2">
         <p-button
           icon="pi pi-pencil"
           [rounded]="true"
