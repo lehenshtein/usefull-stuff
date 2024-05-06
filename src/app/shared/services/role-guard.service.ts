@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { AuthService } from '@shared/services/auth.service';
+import { UserRolesEnum } from '../models/user-roles.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class RoleGuardService {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> {
-    const requiredRole = route.data['requiredRole'];
+    const requiredRole: UserRolesEnum = route.data['requiredRole'];
     const user = this.authService.savedUser;
 
     if (!user) {
