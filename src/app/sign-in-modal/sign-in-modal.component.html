@@ -35,9 +35,9 @@
             [toggleMask]="true"
             placeholder="Should have at least 8 characters"
             promptLabel="Choose a password"
-            weakLabel="Don`t be a fool"
-            mediumLabel="Not bad"
-            strongLabel="Excellent"
+            [weakLabel]="validationErrors.passwordWeakLabel"
+            [mediumLabel]="validationErrors.passwordMediumLabel"
+            [strongLabel]="validationErrors.passwordStrongLabel"
             formControlName="password"
           />
 
@@ -72,9 +72,9 @@
             [toggleMask]="true"
             placeholder="Should have at least 8 characters"
             promptLabel="Choose a password"
-            weakLabel="Don`t be a fool"
-            mediumLabel="Not bad"
-            strongLabel="Excellent"
+            [weakLabel]="validationErrors.passwordWeakLabel"
+            [mediumLabel]="validationErrors.passwordMediumLabel"
+            [strongLabel]="validationErrors.passwordStrongLabel"
             formControlName="password"
           />
 

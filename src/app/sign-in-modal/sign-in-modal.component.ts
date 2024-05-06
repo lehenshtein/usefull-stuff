@@ -19,6 +19,7 @@ import { RouterLink } from '@angular/router';
 import { IAuthCredentials } from '@app/shared/models/auth-credentials.interface';
 import { ILoginGroup } from '@app/shared/models/login-group.interface';
 import { compareValidator } from '@app/shared/validators/compare.validator';
+import { messages } from '@app/shared/messages/messages';
 
 @Component({
   selector: 'app-sign-in-modal',
@@ -42,6 +43,7 @@ export class SignInModalComponent implements OnInit {
   private authService = inject(AuthService);
   private formBuilder = inject(FormBuilder);
   visible: boolean = false;
+  validationErrors = messages.validationErrors;
 
   userLoginGroup!: FormGroup;
   userRegisterGroup!: FormGroup;
