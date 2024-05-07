@@ -5,12 +5,15 @@
 
   .p-tabview-panels {
     width: 430px;
+    max-width: 100%;
 
-    .p-inputtext {
+    .p-float-label {
+      margin: 16px 0;
+    }
+
+    .p-inputtext,
+    .p-password {
       width: 100%;
-      margin: 14px 0;
     }
   }
 }
-
-
