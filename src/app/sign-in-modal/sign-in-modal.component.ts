@@ -14,6 +14,7 @@ import { PasswordModule } from 'primeng/password';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '@app/shared/services/auth.service';
 import { RouterLink } from '@angular/router';
 import { IAuthCredentials } from '@app/shared/models/auth-credentials.interface';
@@ -33,6 +34,7 @@ import { messages } from '@app/shared/messages/messages';
     FloatLabelModule,
     DividerModule,
     ButtonModule,
+    RippleModule,
     RouterLink,
   ],
   templateUrl: './sign-in-modal.component.html',
@@ -44,6 +46,8 @@ export class SignInModalComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   visible: boolean = false;
   validationErrors = messages.validationErrors;
+  emailPattern = /^(?=.*[a-zA-Z]).+$/;
+  passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d).+$/;
 
   userLoginGroup!: FormGroup;
   userRegisterGroup!: FormGroup;
@@ -56,7 +60,7 @@ export class SignInModalComponent implements OnInit {
           Validators.required,
           Validators.minLength(8),
           Validators.email,
-          Validators.pattern(/^(?=.*[a-zA-Z]).+$/),
+          Validators.pattern(this.emailPattern),
         ],
       ],
       password: [
@@ -64,7 +68,7 @@ export class SignInModalComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(8),
-          Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).+$/),
+          Validators.pattern(this.passwordPattern),
         ],
       ],
     });
@@ -76,7 +80,7 @@ export class SignInModalComponent implements OnInit {
           Validators.required,
           Validators.minLength(8),
           Validators.email,
-          Validators.pattern(/^(?=.*[a-zA-Z]).+$/),
+          Validators.pattern(this.emailPattern),
         ],
       ],
       password: [
@@ -84,7 +88,7 @@ export class SignInModalComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(8),
-          Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).+$/),
+          Validators.pattern(this.passwordPattern),
         ],
       ],
       repeatPassword: ['', [Validators.required]],
@@ -92,7 +96,10 @@ export class SignInModalComponent implements OnInit {
 
     this.userRegisterGroup
       .get('repeatPassword')
-      ?.setValidators(compareValidator(this.userRegisterGroup.get('password')));
+      ?.setValidators([
+        Validators.required,
+        compareValidator(this.userRegisterGroup.get('password')),
+      ]);
 
     this.userRegisterGroup.updateValueAndValidity();
   }
@@ -112,6 +119,10 @@ export class SignInModalComponent implements OnInit {
   }
 
   loginUser() {
+    if (this.userLoginGroup.invalid) {
+      return;
+    }
+
     try {
       this.authService.login(this.userLoginCred()).subscribe((user) => {
         console.log('User logged in: ', user); // for debug
@@ -128,6 +139,10 @@ export class SignInModalComponent implements OnInit {
   }
 
   registerUser() {
+    if (this.userRegisterGroup.invalid) {
+      return;
+    }
+
     try {
       this.authService.register(this.userRegisterCred()).subscribe((user) => {
         console.log('User successfully registered: ', user);
@@ -141,19 +156,5 @@ export class SignInModalComponent implements OnInit {
         error
       );
     }
-  }
-
-  resetGroupValues(fg: FormGroup<ILoginGroup>) {
-    fg.patchValue({
-      email: '',
-      password: '',
-      repeatPassword: '',
-    });
-  }
-
-  closeModal() {
-    this.modalService.closeModal();
-    this.resetGroupValues(this.userLoginGroup);
-    this.resetGroupValues(this.userRegisterGroup);
   }
 }

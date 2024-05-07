@@ -2,7 +2,7 @@ import { Component, OnInit, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, PrimeNGConfig } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { items } from '@shared/helpers/menu-items.helper';
@@ -33,6 +33,7 @@ import { DialogService } from 'primeng/dynamicdialog';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
+  private primengConfig = inject(PrimeNGConfig);
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
   isLogged = this.modalService.logged;
@@ -61,5 +62,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.checkIfTokenIsExpired();
+    this.primengConfig.ripple = true;
   }
 }

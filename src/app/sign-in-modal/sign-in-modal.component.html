@@ -39,6 +39,7 @@
     <p-button
       label="Log In"
       (onClick)="loginUser()"
+      [disabled]="this.userLoginGroup.invalid"
       [style]="{ margin: '14px 0' }"
     ></p-button>
   </p-tabPanel>
@@ -88,6 +89,7 @@
     <p-button
       label="Register"
       (onClick)="registerUser()"
+      [disabled]="this.userRegisterGroup.invalid"
       [style]="{ margin: '14px 0' }"
     ></p-button>
   </p-tabPanel>
