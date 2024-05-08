@@ -1,6 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import {
   DialogService,
+  DynamicDialogConfig,
   DynamicDialogModule,
   DynamicDialogRef,
 } from 'primeng/dynamicdialog';
@@ -15,18 +16,21 @@ export class ModalService {
 
   dialogRef: DynamicDialogRef | undefined;
 
-  showModal(component: any, header: string) {
-    this.dialogRef = this.dialogService.open(component, {
-      header: header,
+  showModal(component: any, config: DynamicDialogConfig) {
+    const defaultConfig: DynamicDialogConfig = {
+      header: 'Dialog',
       modal: true,
       width: '40vw',
-      breakpoints: {
+      breakpoints: config.breakpoints || {
         '1280px': '50vw',
         '960px': '65vw',
         '768px': '80vw',
         '640px': '90vw',
       },
-    });
+      ...config,
+    };
+
+    this.dialogRef = this.dialogService.open(component, defaultConfig);
   }
 
   closeModal() {

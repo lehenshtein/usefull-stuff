@@ -48,7 +48,9 @@ export class AppComponent implements OnInit {
   }
 
   showModal() {
-    this.modalService.showModal(SignInModalComponent, 'Choose Sign In Option');
+    this.modalService.showModal(SignInModalComponent, {
+      header: 'Choose Sign In Option',
+    });
   }
 
   signOut() {

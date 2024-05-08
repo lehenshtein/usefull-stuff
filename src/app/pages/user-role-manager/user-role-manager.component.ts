@@ -1,3 +1,4 @@
+import { ModalService } from '@app/shared/services/modal.service';
 import {
   Component,
   OnInit,
@@ -16,6 +17,7 @@ import { AuthService } from '@app/shared/services/auth.service';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { debounceTime, delay, take } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { UserEditModalComponent } from '@app/shared/components/user-edit-modal/user-edit-modal.component';
 
 @Component({
   selector: 'app-user-role-manager',
@@ -34,6 +36,7 @@ import { FormsModule } from '@angular/forms';
 export class UserRoleManagerComponent implements OnInit {
   private authService = inject(AuthService);
   private fs = inject(Firestore);
+  private modalService = inject(ModalService);
 
   private usersSignal = signal<IUser[]>([]);
   users = computed(this.usersSignal);
@@ -55,5 +58,12 @@ export class UserRoleManagerComponent implements OnInit {
         this.usersSignal.set(users as IUser[]);
         this.loading = false;
       });
+  }
+
+  editUser(user: IUser): void {
+    this.modalService.showModal(UserEditModalComponent, {
+      header: 'Edit user',
+      data: { user },
+    });
   }
 }
