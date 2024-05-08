@@ -1,6 +1,7 @@
 import { ModalService } from '@app/shared/services/modal.service';
 import {
   Component,
+  DestroyRef,
   OnInit,
   computed,
   inject,
@@ -18,6 +19,7 @@ import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { debounceTime, delay, take } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { UserEditModalComponent } from '@app/shared/components/user-edit-modal/user-edit-modal.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-role-manager',
@@ -37,6 +39,7 @@ export class UserRoleManagerComponent implements OnInit {
   private authService = inject(AuthService);
   private fs = inject(Firestore);
   private modalService = inject(ModalService);
+  private destroyRef = inject(DestroyRef);
 
   private usersSignal = signal<IUser[]>([]);
   users = computed(this.usersSignal);
@@ -53,7 +56,7 @@ export class UserRoleManagerComponent implements OnInit {
     this.loading = true;
 
     collectionData(usersCollection)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(100))
       .subscribe((users) => {
         this.usersSignal.set(users as IUser[]);
         this.loading = false;

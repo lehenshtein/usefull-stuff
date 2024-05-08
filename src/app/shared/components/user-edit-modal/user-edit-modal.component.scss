@@ -1,0 +1,32 @@
+.edit-form {
+  &__row:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    margin: 0;
+
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__listbox ::ng-deep {
+    .p-listbox-list {
+      padding: 0.25rem;
+    }
+
+    .p-listbox-item {
+      padding: 0.5rem;
+      border-radius: var(--border-radius);
+
+      &:not(:last-child) {
+        margin-bottom: 0.25rem;
+      }
+    }
+
+    .p-listbox-item.p-highlight {
+      font-weight: 700;
+    }
+  }
+}

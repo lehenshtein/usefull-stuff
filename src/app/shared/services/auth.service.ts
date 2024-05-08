@@ -33,6 +33,7 @@ import {
   setDoc,
 } from '@angular/fire/firestore';
 import { IUser } from '../models/user.interface';
+import { UserRolesEnum } from '../models/user-roles.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -165,6 +166,15 @@ export class AuthService {
   getUserData(uid: string): Observable<IUser | undefined> {
     const userDoc = doc(this.fs, 'users', uid);
     return docData(userDoc) as Observable<IUser | undefined>;
+  }
+
+  setUserRoles(uid: string, roles: UserRolesEnum[]): Observable<void> {
+    const userDoc = doc(this.fs, 'users', uid);
+    return from(setDoc(userDoc, { roles }, { merge: true })).pipe(
+      catchError((error) => {
+        return this.errorMessageService.handleError(error);
+      })
+    );
   }
 
   private clearLocalStorage(): void {
