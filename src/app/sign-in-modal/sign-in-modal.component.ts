@@ -1,15 +1,26 @@
 import { Component, OnInit, effect, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { ModalService } from '@app/shared/services/modal.service';
 import { DialogModule } from 'primeng/dialog';
 import { TabViewModule } from 'primeng/tabview';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '@app/shared/services/auth.service';
 import { RouterLink } from '@angular/router';
 import { IAuthCredentials } from '@app/shared/models/auth-credentials.interface';
 import { ILoginGroup } from '@app/shared/models/login-group.interface';
+import { compareValidator } from '@app/shared/validators/compare.validator';
+import { messages } from '@app/shared/messages/messages';
 
 @Component({
   selector: 'app-sign-in-modal',
@@ -19,7 +30,11 @@ import { ILoginGroup } from '@app/shared/models/login-group.interface';
     TabViewModule,
     ReactiveFormsModule,
     InputTextModule,
+    PasswordModule,
+    FloatLabelModule,
+    DividerModule,
     ButtonModule,
+    RippleModule,
     RouterLink,
   ],
   templateUrl: './sign-in-modal.component.html',
@@ -30,27 +45,63 @@ export class SignInModalComponent implements OnInit {
   private authService = inject(AuthService);
   private formBuilder = inject(FormBuilder);
   visible: boolean = false;
+  validationErrors = messages.validationErrors;
+  emailPattern = /^(?=.*[a-zA-Z]).+$/;
+  passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d).+$/;
 
   userLoginGroup!: FormGroup;
   userRegisterGroup!: FormGroup;
 
-  constructor() {
-    effect(() => {
-      this.visible = this.modalService.isVisible();
-    });
-  }
-
   ngOnInit(): void {
     this.userLoginGroup = this.formBuilder.group({
-      email: [''],
-      password: [''],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.email,
+          Validators.pattern(this.emailPattern),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(this.passwordPattern),
+        ],
+      ],
     });
 
     this.userRegisterGroup = this.formBuilder.group({
-      email: [''],
-      password: [''],
-      repeatPassword: [''],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.email,
+          Validators.pattern(this.emailPattern),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(this.passwordPattern),
+        ],
+      ],
+      repeatPassword: ['', [Validators.required]],
     });
+
+    this.userRegisterGroup
+      .get('repeatPassword')
+      ?.setValidators([
+        Validators.required,
+        compareValidator(this.userRegisterGroup.get('password')),
+      ]);
+
+    this.userRegisterGroup.updateValueAndValidity();
   }
 
   userLoginCred(): IAuthCredentials {
@@ -68,9 +119,13 @@ export class SignInModalComponent implements OnInit {
   }
 
   loginUser() {
+    if (this.userLoginGroup.invalid) {
+      return;
+    }
+
     try {
       this.authService.login(this.userLoginCred()).subscribe((user) => {
-        console.log('User logged in: ', user);
+        console.log('User logged in: ', user); // for debug
         this.modalService.setLogged();
       });
 
@@ -84,6 +139,10 @@ export class SignInModalComponent implements OnInit {
   }
 
   registerUser() {
+    if (this.userRegisterGroup.invalid) {
+      return;
+    }
+
     try {
       this.authService.register(this.userRegisterCred()).subscribe((user) => {
         console.log('User successfully registered: ', user);
@@ -97,19 +156,5 @@ export class SignInModalComponent implements OnInit {
         error
       );
     }
-  }
-
-  resetGroupValues(fg: FormGroup<ILoginGroup>) {
-    fg.patchValue({
-      email: '',
-      password: '',
-      repeatPassword: '',
-    });
-  }
-
-  closeModal() {
-    this.modalService.closeModal();
-    this.resetGroupValues(this.userLoginGroup);
-    this.resetGroupValues(this.userRegisterGroup);
   }
 }

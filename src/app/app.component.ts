@@ -2,7 +2,7 @@ import { Component, OnInit, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, PrimeNGConfig } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { items } from '@shared/helpers/menu-items.helper';
@@ -12,6 +12,7 @@ import { SignInModalComponent } from './sign-in-modal/sign-in-modal.component';
 import { ModalService } from './shared/services/modal.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './shared/services/auth.service';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-root',
@@ -27,10 +28,12 @@ import { AuthService } from './shared/services/auth.service';
     DialogModule,
     SignInModalComponent,
   ],
+  providers: [ModalService, DialogService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
+  private primengConfig = inject(PrimeNGConfig);
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
   isLogged = this.modalService.logged;
@@ -41,16 +44,17 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.authService.userChanges();
     this.authService.checkIfTokenIsExpired();
+    this.primengConfig.ripple = true;
   }
 
   showModal() {
-    this.modalService.toggleModal();
+    this.modalService.showModal(SignInModalComponent, 'Choose Sign In Option');
   }
 
   signOut() {
     try {
       this.authService.logout().subscribe((user) => {
-        console.log('User logged out: ', user);
+        console.log('User logged out: ', user); // for debug
         this.modalService.setLoggedOut();
       });
     } catch (error) {
