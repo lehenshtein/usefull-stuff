@@ -8,6 +8,7 @@ import {
 import { provideHttpClient } from '@angular/common/http';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from '@environment/environment';
 import { MessageService } from 'primeng/api';
 
@@ -21,6 +22,7 @@ export const appConfig: ApplicationConfig = {
       provideFirebaseApp(() => initializeApp(environment.firebase))
     ),
     importProvidersFrom(provideAuth(() => getAuth())),
+    importProvidersFrom(provideFirestore(() => getFirestore())),
     MessageService,
   ],
 };
