@@ -1,13 +1,20 @@
 @if (user(); as user) {
 <form class="edit-form" [formGroup]="editForm" (ngSubmit)="onSubmit()">
+  <h3 class="edit-form__title">User roles:</h3>
+
   <div class="edit-form__row">
-    <h3 class="edit-form__title">User roles:</h3>
-    <p-listbox
-      [multiple]="true"
+    <p-multiSelect
       [options]="roles"
       formControlName="roles"
-      class="edit-form__listbox"
-    ></p-listbox>
+      appendTo="body"
+      placeholder="Select Roles"
+      optionLabel="name"
+      optionValue="role"
+      optionDisabled="disabled"
+      [style]="{
+        width: '100%'
+      }"
+    ></p-multiSelect>
   </div>
 
   <p-button label="Save" type="submit" [loading]="loading"></p-button>

@@ -37,7 +37,6 @@ export class AppComponent implements OnInit {
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
   isLogged = this.modalService.logged;
-  // user = this.authService.user$;
 
   items: MenuItem[] = items;
 

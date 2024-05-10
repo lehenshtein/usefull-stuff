@@ -7,7 +7,7 @@ import { Observable, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class ErrorMessageService {
-  messageService = inject(MessageService);
+  private messageService = inject(MessageService);
 
   handleError(error: Error): Observable<never> {
     const errorMessage = this.getErrorMessage(error);
@@ -23,46 +23,55 @@ export class ErrorMessageService {
   }
 
   private getErrorMessage(error: Error): string {
-    let result: string = '';
+    let result: string = 'Unexpected error occured.';
 
     const message = error.message;
     const index = message.indexOf('(');
 
     if (index !== -1) {
-      const code = message.substring(index + 1, message.indexOf(')')); // Res example: auth/invalid-email
+      const code = message.substring(index + 1, message.indexOf(')')); // Error example: auth/invalid-email
+      result = this.getAuthError(code);
+    } else {
+      result = error.message;
+    }
 
-      switch (code) {
-        case AuthErrorCodes.EMAIL_EXISTS: {
-          result = 'Email already in use.';
-          break;
-        }
+    return result;
+  }
 
-        case AuthErrorCodes.INVALID_EMAIL: {
-          result = 'Invalid email.';
-          break;
-        }
+  private getAuthError(code: string): string {
+    let result: string = '';
 
-        case AuthErrorCodes.INVALID_PASSWORD: {
-          result = 'Wrong password.';
-          break;
-        }
+    switch (code) {
+      case AuthErrorCodes.EMAIL_EXISTS: {
+        result = 'Email already in use.';
+        break;
+      }
 
-        case AuthErrorCodes.INVALID_LOGIN_CREDENTIALS: {
-          result = 'Invalid username or password.';
-          break;
-        }
+      case AuthErrorCodes.INVALID_EMAIL: {
+        result = 'Invalid email.';
+        break;
+      }
 
-        case AuthErrorCodes.WEAK_PASSWORD: {
-          result = 'Password should be at least 6 characters.';
-          break;
-        }
+      case AuthErrorCodes.INVALID_PASSWORD: {
+        result = 'Wrong password.';
+        break;
+      }
 
-        // You can add more errors
+      case AuthErrorCodes.INVALID_LOGIN_CREDENTIALS: {
+        result = 'Invalid username or password.';
+        break;
+      }
 
-        default: {
-          result = 'Unexpected error occured.';
-          break;
-        }
+      case AuthErrorCodes.WEAK_PASSWORD: {
+        result = 'Password should be at least 6 characters.';
+        break;
+      }
+
+      // You can add more errors
+
+      default: {
+        result = 'Unexpected auth error occured.';
+        break;
       }
     }
 

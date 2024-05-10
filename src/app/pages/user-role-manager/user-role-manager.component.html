@@ -51,8 +51,7 @@
           [outlined]="true"
           severity="success"
           size="small"
-          [disabled]="user.roles.includes('super-admin')"
-          (onClick)="editUser(user)"
+          (onClick)="onUserEdit(user)"
         ></p-button>
       </td>
     </tr>
