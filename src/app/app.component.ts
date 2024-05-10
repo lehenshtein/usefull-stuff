@@ -13,6 +13,7 @@ import { ModalService } from './shared/services/modal.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './shared/services/auth.service';
 import { DialogService } from 'primeng/dynamicdialog';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-root',
@@ -36,8 +37,8 @@ export class AppComponent implements OnInit {
   private primengConfig = inject(PrimeNGConfig);
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
-  isLogged = this.modalService.logged;
-  // user = this.authService.user$;
+  user = this.authService.user$;
+  isLogged?: User | null;
 
   items: MenuItem[] = items;
 
@@ -61,6 +62,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user.subscribe((user) => {
+      this.isLogged = user;
+    });
     this.authService.checkIfTokenIsExpired();
     this.primengConfig.ripple = true;
   }
