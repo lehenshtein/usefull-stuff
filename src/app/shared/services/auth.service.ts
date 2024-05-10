@@ -8,30 +8,12 @@ import {
   signOut,
   user,
 } from '@angular/fire/auth';
-import {
-  EMPTY,
-  Observable,
-  catchError,
-  concatMap,
-  from,
-  map,
-  of,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import { Observable, catchError, from, map, switchMap, tap } from 'rxjs';
 import { IAuthCredentials } from '../models/auth-credentials.interface';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageEnum } from '../models/local-storage.enum';
 import { Router } from '@angular/router';
-import { getIdTokenResult } from 'firebase/auth';
-import {
-  Firestore,
-  collection,
-  doc,
-  docData,
-  setDoc,
-} from '@angular/fire/firestore';
+import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
 import { IUser } from '../models/user.interface';
 import { UserRolesEnum } from '../models/user-roles.enum';
 
@@ -71,7 +53,6 @@ export class AuthService {
         })
       )
       .subscribe((user) => {
-        console.log('User changes: ', user);
         this.userSignal.set(user);
       });
   }

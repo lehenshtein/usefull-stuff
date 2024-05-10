@@ -2,7 +2,6 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import {
   DialogService,
   DynamicDialogConfig,
-  DynamicDialogModule,
   DynamicDialogRef,
 } from 'primeng/dynamicdialog';
 
