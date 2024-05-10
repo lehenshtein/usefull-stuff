@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { AuthService } from '@shared/services/auth.service';
-import { UserRolesEnum } from '../models/user-roles.enum';
+import { UserRolesEnum } from '../enums/user-roles.enum';
 
 @Injectable({
   providedIn: 'root',

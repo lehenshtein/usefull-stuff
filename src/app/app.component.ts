@@ -26,7 +26,6 @@ import { DialogService } from 'primeng/dynamicdialog';
     ToastModule,
     RippleModule,
     DialogModule,
-    SignInModalComponent,
   ],
   providers: [ModalService, DialogService],
   templateUrl: './app.component.html',

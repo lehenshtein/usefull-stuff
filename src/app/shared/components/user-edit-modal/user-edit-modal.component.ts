@@ -11,7 +11,7 @@ import { ModalService } from '@app/shared/services/modal.service';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { ButtonModule } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { UserRolesEnum } from '@app/shared/models/user-roles.enum';
+import { UserRolesEnum } from '@app/shared/enums/user-roles.enum';
 import { IUser } from '@app/shared/models/user.interface';
 import {
   FormBuilder,

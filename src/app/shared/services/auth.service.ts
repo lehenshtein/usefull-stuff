@@ -11,11 +11,11 @@ import {
 import { Observable, catchError, from, map, switchMap, tap } from 'rxjs';
 import { IAuthCredentials } from '../models/auth-credentials.interface';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { LocalStorageEnum } from '../models/local-storage.enum';
+import { LocalStorageEnum } from '../enums/local-storage.enum';
 import { Router } from '@angular/router';
 import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
 import { IUser } from '../models/user.interface';
-import { UserRolesEnum } from '../models/user-roles.enum';
+import { UserRolesEnum } from '../enums/user-roles.enum';
 
 @Injectable({
   providedIn: 'root',
