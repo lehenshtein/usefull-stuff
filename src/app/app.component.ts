@@ -1,4 +1,4 @@
-import { Component, OnInit, effect, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
@@ -27,7 +27,6 @@ import { User } from 'firebase/auth';
     ToastModule,
     RippleModule,
     DialogModule,
-    SignInModalComponent,
   ],
   providers: [ModalService, DialogService],
   templateUrl: './app.component.html',
@@ -42,8 +41,19 @@ export class AppComponent implements OnInit {
 
   items: MenuItem[] = items;
 
+  ngOnInit(): void {
+    this.authService.userChanges();
+    this.authService.checkIfTokenIsExpired();
+    this.primengConfig.ripple = true;
+    this.user.subscribe((user) => {
+      this.isLogged = user;
+    });
+  }
+
   showModal() {
-    this.modalService.showModal(SignInModalComponent, 'Choose Sign In Option');
+    this.modalService.showModal(SignInModalComponent, {
+      header: 'Choose Sign In Option',
+    });
   }
 
   signOut() {
@@ -59,13 +69,5 @@ export class AppComponent implements OnInit {
       );
     }
     this.modalService.setLoggedOut();
-  }
-
-  ngOnInit(): void {
-    this.user.subscribe((user) => {
-      this.isLogged = user;
-    });
-    this.authService.checkIfTokenIsExpired();
-    this.primengConfig.ripple = true;
   }
 }
