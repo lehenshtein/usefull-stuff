@@ -80,7 +80,7 @@ export class AuthService {
   checkIfTokenIsExpired(): void {
     if (this.token && this.isTokenExpired()) {
       this.logout().subscribe(() => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/timezones']);
       });
     }
   }

@@ -10,7 +10,7 @@
     />
   </ng-template>
   <ng-template pTemplate="end">
-    @if (!isLogged()) {
+    @if (!isLogged) {
     <p-button label="Sign In" (onClick)="showModal()"></p-button>
     } @else {
     <div
