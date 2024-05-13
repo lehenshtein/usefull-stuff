@@ -53,6 +53,10 @@ export class SignInModalComponent implements OnInit {
   userRegisterGroup!: FormGroup;
 
   ngOnInit(): void {
+    this.initLoginRegisterForms();
+  }
+
+  initLoginRegisterForms() {
     this.userLoginGroup = this.formBuilder.group({
       email: [
         '',

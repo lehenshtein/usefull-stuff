@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem, PrimeNGConfig } from 'primeng/api';
@@ -36,6 +36,7 @@ export class AppComponent implements OnInit {
   private primengConfig = inject(PrimeNGConfig);
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
+  private router = inject(Router);
   user = this.authService.user$;
   isLogged?: User | null;
 
@@ -61,6 +62,7 @@ export class AppComponent implements OnInit {
       this.authService.logout().subscribe((user) => {
         console.log('User logged out: ', user); // for debug
         this.modalService.setLoggedOut();
+        this.router.navigate(['/timezones']);
       });
     } catch (error) {
       console.error(
