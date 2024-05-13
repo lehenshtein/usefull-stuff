@@ -1,4 +1,4 @@
-import { Component, OnInit, effect, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
@@ -26,7 +26,6 @@ import { DialogService } from 'primeng/dynamicdialog';
     ToastModule,
     RippleModule,
     DialogModule,
-    SignInModalComponent,
   ],
   providers: [ModalService, DialogService],
   templateUrl: './app.component.html',
@@ -37,7 +36,6 @@ export class AppComponent implements OnInit {
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
   isLogged = this.modalService.logged;
-  // user = this.authService.user$;
 
   items: MenuItem[] = items;
 
@@ -48,7 +46,9 @@ export class AppComponent implements OnInit {
   }
 
   showModal() {
-    this.modalService.showModal(SignInModalComponent, 'Choose Sign In Option');
+    this.modalService.showModal(SignInModalComponent, {
+      header: 'Choose Sign In Option',
+    });
   }
 
   signOut() {
