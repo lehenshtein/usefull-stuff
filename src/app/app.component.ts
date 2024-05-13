@@ -13,6 +13,7 @@ import { ModalService } from './shared/services/modal.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './shared/services/auth.service';
 import { DialogService } from 'primeng/dynamicdialog';
+import { initializeStorage } from '@shared/helpers/localstorage.helper';
 
 @Component({
   selector: 'app-root',
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit {
     this.authService.userChanges();
     this.authService.checkIfTokenIsExpired();
     this.primengConfig.ripple = true;
+    initializeStorage();
   }
 
   showModal() {
