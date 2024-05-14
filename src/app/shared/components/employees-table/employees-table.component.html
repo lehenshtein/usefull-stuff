@@ -17,7 +17,6 @@
     pTemplate="body"
     let-rowData
     let-columns="columns"
-    let-editing="editing"
   >
     <tr>
       @for (col of columns; track col) { 
@@ -26,7 +25,7 @@
             <td>{{ rowData[col.value] | date }}</td>
           } 
           @case ("text") {
-            <td [pEditableColumn]="rowData[col.value]" pEditableColumnField="code">
+            <td [pEditableColumn]="rowData[col.value]" [pEditableColumnField]="col.value">
               <p-cellEditor>
                 <ng-template pTemplate="input">
                   <input pInputText type="text" [(ngModel)]="rowData[col.value]" />
@@ -36,11 +35,13 @@
                 </ng-template>
               </p-cellEditor>
             </td>
-          } 
+          }
           @default {
             <td>{{ rowData[col.value] }}</td>
           } 
         } 
+      } @empty {
+        <td>There are no employees.</td>
       }
     </tr>
   </ng-template>

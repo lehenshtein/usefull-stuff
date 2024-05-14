@@ -8,7 +8,12 @@ import {
 import { FormsModule } from '@angular/forms';
 import { IEmployeeData } from '@app/shared/models/employee-data.interface';
 import { IEmployeeHeader } from '@app/shared/models/employee-header-interface';
-import { TableEditCompleteEvent, TableModule } from 'primeng/table';
+import {
+  TableEditCancelEvent,
+  TableEditCompleteEvent,
+  TableEditInitEvent,
+  TableModule,
+} from 'primeng/table';
 
 @Component({
   selector: 'app-employees-table',
@@ -20,8 +25,8 @@ import { TableEditCompleteEvent, TableModule } from 'primeng/table';
 })
 export class EmployeesTableComponent {
   editComplete = output<TableEditCompleteEvent>();
-  editCancel = output<TableEditCompleteEvent>();
-  editInit = output<TableEditCompleteEvent>();
+  editCancel = output<TableEditCancelEvent>();
+  editInit = output<TableEditInitEvent>();
 
   data = input.required<IEmployeeData[]>();
   headers = input.required<IEmployeeHeader[]>();
