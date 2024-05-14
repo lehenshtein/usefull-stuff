@@ -1,0 +1,28 @@
+$block-default-col: #FFC55A;
+$block-border-col: #daa84a;
+$block-source-color: #02a705;
+$block-destination-color: #00dfcc;
+$c1: #FC4100;
+$block-unreachable-color: #00215E;
+$c3: #2C4E80;
+.matrix-Y {
+  display: flex;
+  opacity: .5;
+}
+.matrix-X {
+  width: 30px;
+  height: 30px;
+  background-color: $block-default-col;
+  border: 1px solid $block-border-col;
+  cursor: pointer;
+  &.source {
+    background-color: $block-source-color;
+  }
+  &.destination {
+    background-color: $block-destination-color;
+  }
+  &.non-reachable {
+    background-color: $block-unreachable-color;
+    pointer-events: none;
+  }
+}

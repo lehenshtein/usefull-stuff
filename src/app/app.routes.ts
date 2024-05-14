@@ -9,6 +9,13 @@ export const routes: Routes = [
     component: TimezonesComponent,
   },
   {
+    path: 'pathfinder',
+    loadComponent: () =>
+      import('./pages/pathfinder/pathfinder.component').then(
+        (m) => m.PathfinderComponent
+      ),
+  },
+  {
     path: 'role-manager',
     loadComponent: () =>
       import('./pages/user-role-manager/user-role-manager.component').then(
@@ -29,4 +36,8 @@ export const routes: Routes = [
   //   canActivate: [AuthGuardService, RoleGuardService],
   //   data: {requiredRole: 'SuperAdmin'}
   // }
+  {
+    path: '*',
+    redirectTo: '/'
+  }
 ];

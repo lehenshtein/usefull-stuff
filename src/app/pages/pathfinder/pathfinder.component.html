@@ -1,0 +1,17 @@
+<div class="flex flex-wrap flex-column align-items-center justify-content-center">
+  @for(row of matrix; track $index) {
+  <div class="matrix-Y">
+    @for(col of row; track col.id; let indexX = $index) {
+      <div class="matrix-X"
+           [pTooltip]="indexX + ':' + $index"
+           (click)="selectNode($index, indexX, col)"
+           [ngClass]="{
+             source: col.visual === 'source',
+             'non-reachable': col.type === 'non-reachable',
+             destination: col.visual === 'destination'
+           }"
+      ></div>
+    }
+  </div>
+  }
+</div>
