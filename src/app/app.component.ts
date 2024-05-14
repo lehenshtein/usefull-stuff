@@ -43,15 +43,14 @@ export class AppComponent implements OnInit {
 
   items: MenuItem[] = items;
 
-  //
   testData: IEmployeeData[] = [
     {
       myEmployee: 'John',
-      date: '20 11 2024 GMT +03:00',
+      date: '2020-03-06T11:04:06.000Z',
     },
     {
       myEmployee: 'Sarah',
-      date: '20 11 2024 GMT +03:00',
+      date: '2020-03-06T11:04:06.000Z',
     },
   ];
   testHeaders: IEmployeeHeader[] = [
@@ -90,7 +89,7 @@ export class AppComponent implements OnInit {
     } catch (error) {
       console.error(
         'Following error occured while trying to logout user: ',
-        error
+        error,
       );
     }
     this.modalService.setLoggedOut();

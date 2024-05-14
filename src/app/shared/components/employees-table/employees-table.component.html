@@ -2,18 +2,45 @@
   [columns]="headers()"
   [value]="data()"
   styleClass="p-datatable-striped"
+  (onEditInit)="editInit.emit($event)"
+  (onEditComplete)="editComplete.emit($event)"
+  (onEditCancel)="editCancel.emit($event)"
 >
   <ng-template pTemplate="header" let-columns>
     <tr>
       @for (col of columns; track col) {
-      <th [style]="{ width: col.width }">{{ col.headerName }}</th>
+        <th [style]="{ width: col.width }">{{ col.headerName }}</th>
       }
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-value let-columns="columns">
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-editing="editing"
+  >
     <tr>
-      @for (col of columns; track col) {
-      <td>{{ value[col.value] }}</td>
+      @for (col of columns; track col) { 
+        @switch (col.type) { 
+          @case ("date") {
+            <td>{{ rowData[col.value] | date }}</td>
+          } 
+          @case ("text") {
+            <td [pEditableColumn]="rowData[col.value]" pEditableColumnField="code">
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="rowData[col.value]" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ rowData[col.value] }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+          } 
+          @default {
+            <td>{{ rowData[col.value] }}</td>
+          } 
+        } 
       }
     </tr>
   </ng-template>
