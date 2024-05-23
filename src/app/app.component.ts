@@ -16,6 +16,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { User } from 'firebase/auth';
 import { initializeStorage } from '@shared/helpers/localstorage.helper';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -28,7 +29,6 @@ import { initializeStorage } from '@shared/helpers/localstorage.helper';
     ToastModule,
     RippleModule,
     DialogModule,
-    SignInModalComponent,
   ],
   providers: [ModalService, DialogService],
   templateUrl: './app.component.html',

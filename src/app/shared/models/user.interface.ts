@@ -1,4 +1,4 @@
-import { UserRolesEnum } from './user-roles.enum';
+import { UserRolesEnum } from '../enums/user-roles.enum';
 
 export interface IUser {
   email: string;

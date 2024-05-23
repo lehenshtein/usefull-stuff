@@ -8,31 +8,14 @@ import {
   signOut,
   user,
 } from '@angular/fire/auth';
-import {
-  EMPTY,
-  Observable,
-  catchError,
-  concatMap,
-  from,
-  map,
-  of,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import { Observable, catchError, from, map, switchMap, tap } from 'rxjs';
 import { IAuthCredentials } from '../models/auth-credentials.interface';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { LocalStorageEnum } from '../models/local-storage.enum';
+import { LocalStorageEnum } from '../enums/local-storage.enum';
 import { Router } from '@angular/router';
-import { getIdTokenResult } from 'firebase/auth';
-import {
-  Firestore,
-  collection,
-  doc,
-  docData,
-  setDoc,
-} from '@angular/fire/firestore';
+import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
 import { IUser } from '../models/user.interface';
+import { UserRolesEnum } from '../enums/user-roles.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -70,7 +53,6 @@ export class AuthService {
         })
       )
       .subscribe((user) => {
-        console.log('User changes: ', user);
         this.userSignal.set(user);
       });
   }
@@ -98,7 +80,7 @@ export class AuthService {
   checkIfTokenIsExpired(): void {
     if (this.token && this.isTokenExpired()) {
       this.logout().subscribe(() => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/timezones']);
       });
     }
   }
@@ -165,6 +147,15 @@ export class AuthService {
   getUserData(uid: string): Observable<IUser | undefined> {
     const userDoc = doc(this.fs, 'users', uid);
     return docData(userDoc) as Observable<IUser | undefined>;
+  }
+
+  setUserRoles(uid: string, roles: UserRolesEnum[]): Observable<void> {
+    const userDoc = doc(this.fs, 'users', uid);
+    return from(setDoc(userDoc, { roles }, { merge: true })).pipe(
+      catchError((error) => {
+        return this.errorMessageService.handleError(error);
+      })
+    );
   }
 
   private clearLocalStorage(): void {
