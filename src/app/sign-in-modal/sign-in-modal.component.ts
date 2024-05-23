@@ -1,10 +1,5 @@
-import { Component, OnInit, effect, inject } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalService } from '@app/shared/services/modal.service';
 import { DialogModule } from 'primeng/dialog';
 import { TabViewModule } from 'primeng/tabview';
@@ -18,7 +13,6 @@ import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '@app/shared/services/auth.service';
 import { RouterLink } from '@angular/router';
 import { IAuthCredentials } from '@app/shared/models/auth-credentials.interface';
-import { ILoginGroup } from '@app/shared/models/login-group.interface';
 import { compareValidator } from '@app/shared/validators/compare.validator';
 import { messages } from '@app/shared/messages/messages';
 
