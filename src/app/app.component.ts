@@ -1,5 +1,5 @@
-import { Component, OnInit, effect, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem, PrimeNGConfig } from 'primeng/api';
@@ -13,6 +13,7 @@ import { ModalService } from './shared/services/modal.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './shared/services/auth.service';
 import { DialogService } from 'primeng/dynamicdialog';
+import { User } from 'firebase/auth';
 import { initializeStorage } from '@shared/helpers/localstorage.helper';
 
 @Component({
@@ -37,8 +38,9 @@ export class AppComponent implements OnInit {
   private primengConfig = inject(PrimeNGConfig);
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
-  isLogged = this.modalService.logged;
-  // user = this.authService.user$;
+  private router = inject(Router);
+  user = this.authService.user$;
+  isLogged?: User | null;
 
   items: MenuItem[] = items;
 
@@ -47,10 +49,15 @@ export class AppComponent implements OnInit {
     this.authService.checkIfTokenIsExpired();
     this.primengConfig.ripple = true;
     initializeStorage();
+    this.user.subscribe((user) => {
+      this.isLogged = user;
+    });
   }
 
   showModal() {
-    this.modalService.showModal(SignInModalComponent, 'Choose Sign In Option');
+    this.modalService.showModal(SignInModalComponent, {
+      header: 'Choose Sign In Option',
+    });
   }
 
   signOut() {
@@ -58,6 +65,7 @@ export class AppComponent implements OnInit {
       this.authService.logout().subscribe((user) => {
         console.log('User logged out: ', user); // for debug
         this.modalService.setLoggedOut();
+        this.router.navigate(['/timezones']);
       });
     } catch (error) {
       console.error(
