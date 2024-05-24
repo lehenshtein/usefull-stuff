@@ -19,6 +19,13 @@ export const routes: Routes = [
       requiredRole: 'super-admin',
     },
   },
+  {
+    path: 'tables',
+    loadComponent: () =>
+      import('./pages/table-generator/table-generator.component').then(
+        (m) => m.TableGeneratorComponent
+      ),
+  },
   // {
   //   path: 'admin',
   //   canActivate: [AuthGuardService, RoleGuardService],

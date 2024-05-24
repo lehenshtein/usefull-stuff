@@ -128,5 +128,10 @@ export const items: MenuItem[] = [
     label: 'Timezones',
     icon: 'pi pi-fw pi-calendar-times',
     routerLink: 'timezones',
+  },
+  {
+    label: 'Tables',
+    icon: 'pi pi-fw pi-table',
+    routerLink: 'tables',
   }
 ];
