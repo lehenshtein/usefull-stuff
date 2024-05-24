@@ -13,8 +13,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
-import { ITableColumn } from '@shared/models/table-column.interface';
 import { DataTypesEnum } from '@app/shared/enums/data-types.enum';
+import { ModalService } from '@app/shared/services/modal.service';
 
 @Component({
   selector: 'app-create-table-modal',
@@ -31,13 +31,10 @@ import { DataTypesEnum } from '@app/shared/enums/data-types.enum';
   styleUrl: './create-table-modal.component.scss',
 })
 export class CreateTableModalComponent implements OnInit {
+  private modalService = inject(ModalService);
   private formBuilder = inject(FormBuilder);
   keyPattern = /^[a-zA-Z0-9]+$/;
   dataTypes: { name: string }[] = [];
-
-  tableNameControl: FormControl = this.formBuilder.control({
-    tableName: ['', Validators.required],
-  });
 
   tableFormGroup = this.formBuilder.group({
     tableName: ['', Validators.required],
@@ -65,12 +62,16 @@ export class CreateTableModalComponent implements OnInit {
 
   addColumn() {
     this.columnGroups.push(this.createColumn());
-
-    console.log(this.columnGroups); // for debug
   }
 
   saveTable() {
-    // will save to localStorage here
+    localStorage.setItem(
+      'tableData',
+      JSON.stringify(this.tableFormGroup.value)
+    );
+    this.modalService.closeModal();
+    
+    console.log(JSON.stringify(this.tableFormGroup.value)); // for debug
   }
 
   isValid() {
