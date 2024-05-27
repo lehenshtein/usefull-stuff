@@ -1,4 +1,4 @@
-import { LocalStorageEnum } from '@shared/models/local-storage.enum';
+import { LocalStorageEnum } from '@shared/enums/local-storage.enum';
 
 export function initializeStorage() : void {
   Object.values(LocalStorageEnum).forEach(key => {
