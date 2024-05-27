@@ -6,8 +6,8 @@ import {
   output,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IEmployeeData } from '@app/shared/models/employee-data.interface';
-import { IEmployeeHeader } from '@app/shared/models/employee-header-interface';
+import { ITableData } from '@app/shared/models/table-data.interface';
+import { ITableHeader } from '@app/shared/models/table-header-interface';
 import {
   TableEditCancelEvent,
   TableEditCompleteEvent,
@@ -16,18 +16,18 @@ import {
 } from 'primeng/table';
 
 @Component({
-  selector: 'app-employees-table',
+  selector: 'app-custom-table',
   standalone: true,
   imports: [TableModule, DatePipe, FormsModule],
-  templateUrl: './employees-table.component.html',
-  styleUrl: './employees-table.component.scss',
+  templateUrl: './custom-table.component.html',
+  styleUrl: './custom-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmployeesTableComponent {
+export class CustomTableComponent {
   editComplete = output<TableEditCompleteEvent>();
   editCancel = output<TableEditCancelEvent>();
   editInit = output<TableEditInitEvent>();
 
-  data = input.required<IEmployeeData[]>();
-  headers = input.required<IEmployeeHeader[]>();
+  data = input.required<ITableData[]>();
+  headers = input.required<ITableHeader[]>();
 }
