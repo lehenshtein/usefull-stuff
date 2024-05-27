@@ -1,0 +1,24 @@
+<div class="wrapper">
+  <h3>Create Dropdown Group</h3>
+  <p-inputGroup>
+    <input [(ngModel)]="newGroupName" type="text" pInputText placeholder="Group Name" />
+    <button (click)="addGroup()" type="button" pButton icon="pi pi-plus" class="p-button-success"></button>
+  </p-inputGroup>
+  @if(dropdownGroups.length > 0){
+    <h3>Select Group</h3>
+    <p-dropdown [options]="dropdownGroups" [(ngModel)]="selectedGroup" optionLabel="name" placeholder="Select a Group"></p-dropdown>
+  }
+  @if(selectedGroup){
+    <h3>Add Item to {{ selectedGroup.name }}</h3>
+    <p-inputGroup>
+      <input [(ngModel)]="newItemName" type="text" pInputText placeholder="Group Name" />
+      <button (click)="addItem()" type="button" pButton icon="pi pi-plus" class="p-button-success"></button>
+    </p-inputGroup>
+    <h3>Items in {{ selectedGroup.name }}</h3>
+    <span>
+      @for(item of selectedGroup.items; track item){
+        <li>{{ item.name }} (ID: {{ item.id }})</li>
+      }
+    </span>
+  }
+</div>
