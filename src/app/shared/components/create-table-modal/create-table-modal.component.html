@@ -36,23 +36,41 @@
         </div>
         <div class="input-wrapper flex flex-row flex-wrap gap-2">
           <div class="flex flex-column flex-1 gap-2 my-3 w-full">
-            <label for="width" class="font-medium">Width</label>
-            <p-inputNumber
-              inputId="width"
-              suffix="px"
-              [showButtons]="true"
-              [min]="50"
-              [max]="500"
-              placeholder="50...500px"
-              formControlName="width"
-            />
+            <form [formGroup]="asFormGroup(column.get('width'))">
+              <div class="flex flex-column flex-1 gap-2 w-full">
+                <label for="width" class="font-medium">Width</label>
+                <p-inputNumber
+                  inputId="width"
+                  [suffix]="currentWidthType.suffix"
+                  [showButtons]="true"
+                  [min]="currentWidthType.minValue"
+                  [max]="currentWidthType.maxValue"
+                  [placeholder]="currentWidthType.placeholder"
+                  formControlName="value"
+                />
+              </div>
+              <div
+                class="flex flex-row flex-1 justify-content-center mt-3 w-full"
+              >
+                @for (type of widthTypes; track type) {
+                <p-radioButton
+                  [inputId]="type"
+                  [value]="type"
+                  formControlName="type"
+                  (onClick)="changeCurrentType(type)"
+                />
+                <label [for]="type" class="ml-2 mr-3 font-medium">
+                  {{ type }}
+                </label>
+                }
+              </div>
+            </form>
           </div>
           <div class="flex flex-column flex-1 gap-2 my-3 w-full">
             <label for="dataTypes" class="font-medium">Data Type</label>
             <p-dropdown
               id="dataTypes"
               [options]="dataTypes"
-              optionLabel="name"
               [showClear]="true"
               placeholder="Select Data Type"
               formControlName="type"
