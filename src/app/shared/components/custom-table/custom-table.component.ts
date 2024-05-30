@@ -1,3 +1,4 @@
+import { DataTypesEnum } from '@app/shared/enums/data-types.enum';
 import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -30,4 +31,12 @@ export class CustomTableComponent {
 
   data = input.required<ITableData[]>();
   headers = input.required<ITableHeader[]>();
+
+  get DataTypesEnum() {
+    return DataTypesEnum;
+  }
+
+  getDropdownItems(name: string) {
+    return localStorage.getItem(name)
+  }
 }

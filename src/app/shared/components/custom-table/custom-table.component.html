@@ -21,10 +21,10 @@
     <tr>
       @for (col of columns; track col) { 
         @switch (col.type) { 
-          @case ("date") {
+          @case (DataTypesEnum.Date) {
             <td>{{ rowData[col.value] | date }}</td>
           } 
-          @case ("text") {
+          @case (DataTypesEnum.Text) {
             <td [pEditableColumn]="rowData[col.value]" [pEditableColumnField]="col.value">
               <p-cellEditor>
                 <ng-template pTemplate="input">
@@ -35,6 +35,9 @@
                 </ng-template>
               </p-cellEditor>
             </td>
+          }
+          @case (DataTypesEnum.Dropdown) {
+            <td>dropdown</td>
           }
           @default {
             <td>{{ rowData[col.value] }}</td>
