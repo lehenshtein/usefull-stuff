@@ -78,6 +78,10 @@ export class CreateTableModalComponent implements OnInit {
     this.columnGroups.push(this.createColumn());
   }
 
+  deleteColumn(index: number) {
+    this.columnGroups.removeAt(index);
+  }
+
   saveTable() {
     localStorage.setItem(
       'tableData',
