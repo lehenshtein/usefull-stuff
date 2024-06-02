@@ -97,6 +97,10 @@ export class CreateTableModalComponent implements OnInit {
   }
 
   asFormGroup(control: AbstractControl | null) {
+    if (!control) {
+      throw new Error('Given control is null or undefined!');
+    }
+
     return control as FormGroup;
   }
 
@@ -104,9 +108,6 @@ export class CreateTableModalComponent implements OnInit {
     switch (type) {
       case 'px':
         this.currentWidthType = widthTypes[0];
-        break;
-      case '%':
-        this.currentWidthType = widthTypes[1];
         break;
       default:
         this.currentWidthType = widthTypes[1];
