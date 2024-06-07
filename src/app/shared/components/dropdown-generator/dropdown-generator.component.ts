@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -31,11 +31,15 @@ interface DropdownGroup {
   templateUrl: './dropdown-generator.component.html',
   styleUrl: './dropdown-generator.component.scss'
 })
-export class DropdownGeneratorComponent {
+export class DropdownGeneratorComponent implements OnInit{
   dropdownGroups: DropdownGroup[] = [];
   newGroupName: string = '';
   newItemName: string = '';
   selectedGroup: DropdownGroup | null = null;
+
+  ngOnInit(): void {
+    this.loadFromLocalStorage();
+  }
 
   addGroup(): void {
     if (this.newGroupName.trim()) {
@@ -44,6 +48,7 @@ export class DropdownGeneratorComponent {
         items: []
       });
       this.newGroupName = '';
+      this.saveToLocalStorage();
     }
   }
 
@@ -55,11 +60,22 @@ export class DropdownGeneratorComponent {
       };
       this.selectedGroup.items.push(newItem);
       this.newItemName = '';
+      this.saveToLocalStorage();
     }
-    //console.log('groups[]: ', this.dropdownGroups);
   }
 
   generateId(): number {
     return Math.floor(Math.random() * 1000000);
+  }
+
+  saveToLocalStorage(): void {
+    localStorage.setItem('dropdownGroups', JSON.stringify(this.dropdownGroups));
+  }
+
+  loadFromLocalStorage(): void {
+    const data = localStorage.getItem('dropdownGroups');
+    if (data) {
+      this.dropdownGroups = JSON.parse(data);
+    }
   }
 }
