@@ -62,6 +62,7 @@ export class DropdownGeneratorComponent implements OnInit{
       this.newItemName = '';
       this.saveToLocalStorage();
     }
+    //console.log('groups[]: ', this.dropdownGroups);
   }
 
   generateId(): number {

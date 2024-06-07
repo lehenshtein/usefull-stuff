@@ -1,0 +1,51 @@
+<p-table
+  [columns]="headers()"
+  [value]="data()"
+  styleClass="p-datatable-striped"
+  (onEditInit)="editInit.emit($event)"
+  (onEditComplete)="editComplete.emit($event)"
+  (onEditCancel)="editCancel.emit($event)"
+>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      @for (col of columns; track col) {
+        <th [style]="{ width: col.width }">{{ col.headerName }}</th>
+      }
+    </tr>
+  </ng-template>
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+  >
+    <tr>
+      @for (col of columns; track col) { 
+        @switch (col.type) { 
+          @case (DataTypesEnum.Date) {
+            <td>{{ rowData[col.value] | date }}</td>
+          } 
+          @case (DataTypesEnum.Text) {
+            <td [pEditableColumn]="rowData[col.value]" [pEditableColumnField]="col.value">
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="rowData[col.value]" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ rowData[col.value] }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+          }
+          @case (DataTypesEnum.Dropdown) {
+            <td>dropdown</td>
+          }
+          @default {
+            <td>{{ rowData[col.value] }}</td>
+          } 
+        } 
+      } @empty {
+        <td>There are no items.</td>
+      }
+    </tr>
+  </ng-template>
+</p-table>
