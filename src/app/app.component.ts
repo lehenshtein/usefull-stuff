@@ -16,9 +16,9 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { User } from 'firebase/auth';
 import { initializeStorage } from '@shared/helpers/localstorage.helper';
 import { CustomTableComponent } from './shared/components/custom-table/custom-table.component';
-import { ITableHeader } from './shared/models/table-header-interface';
 import { DataTypesEnum } from './shared/enums/data-types.enum';
 import { ITableData } from './shared/models/table-data.interface';
+import { ITableColumn } from './shared/models/table-column.interface';
 
 @Component({
   selector: 'app-root',
@@ -48,18 +48,33 @@ export class AppComponent implements OnInit {
 
   items: MenuItem[] = items;
 
-  tableHeaders: ITableHeader[] = [
+  tableColumns: ITableColumn[] = [
     {
-      value: 'myEmployee',
+      key: 'myEmployee',
       headerName: 'Employees',
-      width: '30%',
+      width: {
+        value: 50,
+        type: '%',
+      },
       type: DataTypesEnum.Text,
     },
     {
-      value: 'date',
+      key: 'date',
       headerName: 'Start Date',
-      width: '30%',
+      width: {
+        value: 20,
+        type: '%',
+      },
       type: DataTypesEnum.Date,
+    },
+    {
+      key: 'dropdownName',
+      headerName: 'Dropdowns',
+      width: {
+        value: 30,
+        type: '%',
+      },
+      type: DataTypesEnum.Dropdown,
     },
   ];
 
@@ -71,6 +86,12 @@ export class AppComponent implements OnInit {
     {
       myEmployee: 'Sarah',
       date: (Date.now() + 1000000000).toString(),
+      dropdownName: 'quantity',
+    },
+    {
+      myEmployee: 'Shrek',
+      date: (Date.now() + 1000000000).toString(),
+      dropdownName: 'test name',
     },
   ];
 

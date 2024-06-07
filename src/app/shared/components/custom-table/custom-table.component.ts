@@ -8,18 +8,26 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ITableData } from '@app/shared/models/table-data.interface';
-import { ITableHeader } from '@app/shared/models/table-header-interface';
 import {
   TableEditCancelEvent,
   TableEditCompleteEvent,
   TableEditInitEvent,
   TableModule,
 } from 'primeng/table';
+import { ITableColumn } from '@app/shared/models/table-column.interface';
+import { DropdownModule } from 'primeng/dropdown';
+import { DropdownItemsPipe } from '@app/shared/pipes/dropdown-items.pipe';
 
 @Component({
   selector: 'app-custom-table',
   standalone: true,
-  imports: [TableModule, DatePipe, FormsModule],
+  imports: [
+    TableModule,
+    DatePipe,
+    FormsModule,
+    DropdownModule,
+    DropdownItemsPipe,
+  ],
   templateUrl: './custom-table.component.html',
   styleUrl: './custom-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,13 +38,9 @@ export class CustomTableComponent {
   editInit = output<TableEditInitEvent>();
 
   data = input.required<ITableData[]>();
-  headers = input.required<ITableHeader[]>();
+  columns = input.required<ITableColumn[]>();
 
   get DataTypesEnum() {
     return DataTypesEnum;
-  }
-
-  getDropdownItems(name: string) {
-    return localStorage.getItem(name)
   }
 }

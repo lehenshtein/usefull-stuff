@@ -1,5 +1,5 @@
 <p-table
-  [columns]="headers()"
+  [columns]="columns()"
   [value]="data()"
   styleClass="p-datatable-striped"
   (onEditInit)="editInit.emit($event)"
@@ -9,38 +9,46 @@
   <ng-template pTemplate="header" let-columns>
     <tr>
       @for (col of columns; track col) {
-        <th [style]="{ width: col.width }">{{ col.headerName }}</th>
+      <th [style]="{ width: col.width.value + col.width.type }">
+        {{ col.headerName }}
+      </th>
       }
     </tr>
   </ng-template>
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-columns="columns"
-  >
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr>
       @for (col of columns; track col) { 
         @switch (col.type) { 
           @case (DataTypesEnum.Date) {
-            <td>{{ rowData[col.value] | date }}</td>
+            <td>{{ rowData[col.key] | date }}</td>
           } 
           @case (DataTypesEnum.Text) {
-            <td [pEditableColumn]="rowData[col.value]" [pEditableColumnField]="col.value">
+            <td
+              [pEditableColumn]="rowData[col.value]"
+              [pEditableColumnField]="col.value"
+            >
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="rowData[col.value]" />
+                  <input pInputText type="text" [(ngModel)]="rowData[col.key]" />
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{ rowData[col.value] }}
+                  {{ rowData[col.key] }}
                 </ng-template>
               </p-cellEditor>
             </td>
-          }
+          } 
           @case (DataTypesEnum.Dropdown) {
-            <td>dropdown</td>
-          }
+            <td>
+              <p-dropdown 
+                appendTo="body" 
+                [options]="rowData[col.key] | dropdownItems" 
+                optionLabel="name" 
+                optionValue="id"
+              ></p-dropdown>
+            </td>
+          } 
           @default {
-            <td>{{ rowData[col.value] }}</td>
+            <td>{{ rowData[col.key] }}</td>
           } 
         } 
       } @empty {
