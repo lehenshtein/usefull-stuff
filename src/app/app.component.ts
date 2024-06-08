@@ -15,10 +15,6 @@ import { AuthService } from './shared/services/auth.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { User } from 'firebase/auth';
 import { initializeStorage } from '@shared/helpers/localstorage.helper';
-import { CustomTableComponent } from './shared/components/custom-table/custom-table.component';
-import { DataTypesEnum } from './shared/enums/data-types.enum';
-import { ITableData } from './shared/models/table-data.interface';
-import { ITableColumn } from './shared/models/table-column.interface';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +28,6 @@ import { ITableColumn } from './shared/models/table-column.interface';
     ToastModule,
     RippleModule,
     DialogModule,
-    CustomTableComponent,
   ],
   providers: [ModalService, DialogService],
   templateUrl: './app.component.html',
