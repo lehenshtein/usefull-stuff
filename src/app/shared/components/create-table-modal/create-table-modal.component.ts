@@ -88,7 +88,6 @@ export class CreateTableModalComponent implements OnInit {
       JSON.stringify(this.tableFormGroup.value)
     );
     this.modalService.closeModal();
-
     console.log(JSON.stringify(this.tableFormGroup.value)); // for debug
   }
 
