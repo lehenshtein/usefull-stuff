@@ -21,7 +21,7 @@
         @switch (col.type) { 
           @case (DataTypesEnum.Date) {
             <td>{{ rowData[col.key] | date }}</td>
-          } 
+          }
           @case (DataTypesEnum.Text) {
             <td
               [pEditableColumn]="rowData[col.value]"
@@ -36,17 +36,20 @@
                 </ng-template>
               </p-cellEditor>
             </td>
-          } 
+          }
           @case (DataTypesEnum.Dropdown) {
-            <td>
+            <td >
               <p-dropdown 
                 appendTo="body" 
                 [options]="rowData[col.key] | dropdownItems" 
                 optionLabel="name" 
                 optionValue="id"
+                [style]="{
+                  width: '100%',
+                }"
               ></p-dropdown>
             </td>
-          } 
+          }
           @default {
             <td>{{ rowData[col.key] }}</td>
           } 

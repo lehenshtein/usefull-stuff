@@ -53,8 +53,8 @@ export class AppComponent implements OnInit {
       key: 'myEmployee',
       headerName: 'Employees',
       width: {
-        value: 50,
-        type: '%',
+        value: 200,
+        type: 'px',
       },
       type: DataTypesEnum.Text,
     },
@@ -62,8 +62,8 @@ export class AppComponent implements OnInit {
       key: 'date',
       headerName: 'Start Date',
       width: {
-        value: 20,
-        type: '%',
+        value: 200,
+        type: 'px',
       },
       type: DataTypesEnum.Date,
     },
@@ -71,8 +71,8 @@ export class AppComponent implements OnInit {
       key: 'dropdownName',
       headerName: 'Dropdowns',
       width: {
-        value: 30,
-        type: '%',
+        value: 100,
+        type: 'px',
       },
       type: DataTypesEnum.Dropdown,
     },
@@ -91,7 +91,7 @@ export class AppComponent implements OnInit {
     {
       myEmployee: 'Shrek',
       date: (Date.now() + 1000000000).toString(),
-      dropdownName: 'test name',
+      dropdownName: 'names',
     },
   ];
 
