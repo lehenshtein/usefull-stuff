@@ -4,7 +4,5 @@ export interface ITableColumn {
   headerName: string;
   key: string;
   width: string;
-  type: {
-    name: DataTypesEnum;
-  };
+  type: DataTypesEnum;
 }
