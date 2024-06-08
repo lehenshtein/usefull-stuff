@@ -48,53 +48,6 @@ export class AppComponent implements OnInit {
 
   items: MenuItem[] = items;
 
-  tableColumns: ITableColumn[] = [
-    {
-      key: 'myEmployee',
-      headerName: 'Employees',
-      width: {
-        value: 200,
-        type: 'px',
-      },
-      type: DataTypesEnum.Text,
-    },
-    {
-      key: 'date',
-      headerName: 'Start Date',
-      width: {
-        value: 200,
-        type: 'px',
-      },
-      type: DataTypesEnum.Date,
-    },
-    {
-      key: 'dropdownName',
-      headerName: 'Dropdowns',
-      width: {
-        value: 100,
-        type: 'px',
-      },
-      type: DataTypesEnum.Dropdown,
-    },
-  ];
-
-  tableData: ITableData[] = [
-    {
-      myEmployee: 'John',
-      date: Date.now().toString(),
-    },
-    {
-      myEmployee: 'Sarah',
-      date: (Date.now() + 1000000000).toString(),
-      dropdownName: 'quantity',
-    },
-    {
-      myEmployee: 'Shrek',
-      date: (Date.now() + 1000000000).toString(),
-      dropdownName: 'names',
-    },
-  ];
-
   ngOnInit(): void {
     this.authService.userChanges();
     this.authService.checkIfTokenIsExpired();

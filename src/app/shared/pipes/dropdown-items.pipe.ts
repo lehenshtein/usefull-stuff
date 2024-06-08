@@ -1,11 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { IDropdownItem } from '../models/dropdown-item.interface';
 import { LocalStorageEnum } from '../enums/local-storage.enum';
-
-interface IStorageDropdownGroup {
-  name: string;
-  items: IDropdownItem[];
-}
+import { ISavedDropdownGroup } from '../models/saved-dropdown-group.interface';
 
 @Pipe({
   name: 'dropdownItems',
@@ -27,7 +23,7 @@ export class DropdownItemsPipe implements PipeTransform {
       return [];
     }
 
-    const groups = JSON.parse(groupsItem) as IStorageDropdownGroup[];
+    const groups = JSON.parse(groupsItem) as ISavedDropdownGroup[];
     const items: IDropdownItem[] = groups.reduce(
       (acc: IDropdownItem[], group) => {
         if (group.name === name) {
