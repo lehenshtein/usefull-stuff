@@ -24,8 +24,8 @@
           }
           @case (DataTypesEnum.Text) {
             <td
-              [pEditableColumn]="rowData[col.value]"
-              [pEditableColumnField]="col.value"
+              [pEditableColumn]="rowData[col.key]"
+              [pEditableColumnField]="col.key"
             >
               <p-cellEditor>
                 <ng-template pTemplate="input">
