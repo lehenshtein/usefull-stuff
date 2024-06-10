@@ -15,10 +15,6 @@ import { AuthService } from './shared/services/auth.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { User } from 'firebase/auth';
 import { initializeStorage } from '@shared/helpers/localstorage.helper';
-import { CustomTableComponent } from './shared/components/custom-table/custom-table.component';
-import { ITableHeader } from './shared/models/table-header-interface';
-import { DataTypesEnum } from './shared/enums/data-types.enum';
-import { ITableData } from './shared/models/table-data.interface';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +28,6 @@ import { ITableData } from './shared/models/table-data.interface';
     ToastModule,
     RippleModule,
     DialogModule,
-    CustomTableComponent,
   ],
   providers: [ModalService, DialogService],
   templateUrl: './app.component.html',
@@ -47,32 +42,6 @@ export class AppComponent implements OnInit {
   isLogged?: User | null;
 
   items: MenuItem[] = items;
-
-  tableHeaders: ITableHeader[] = [
-    {
-      value: 'myEmployee',
-      headerName: 'Employees',
-      width: '30%',
-      type: DataTypesEnum.Text,
-    },
-    {
-      value: 'date',
-      headerName: 'Start Date',
-      width: '30%',
-      type: DataTypesEnum.Date,
-    },
-  ];
-
-  tableData: ITableData[] = [
-    {
-      myEmployee: 'John',
-      date: Date.now().toString(),
-    },
-    {
-      myEmployee: 'Sarah',
-      date: (Date.now() + 1000000000).toString(),
-    },
-  ];
 
   ngOnInit(): void {
     this.authService.userChanges();

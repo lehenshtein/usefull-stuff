@@ -5,17 +5,8 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ListboxModule } from 'primeng/listbox';
-
-
-interface DropdownItem {
-  id: number;
-  name: string;
-}
-
-interface DropdownGroup {
-  name: string;
-  items: DropdownItem[];
-}
+import { IDropdownGroup } from '@app/shared/models/dropdown-group.interface';
+import { IDropdownItem } from '@app/shared/models/dropdown-item.interface';
 
 @Component({
   selector: 'app-dropdown-generator',
@@ -26,16 +17,16 @@ interface DropdownGroup {
     InputGroupModule,
     InputTextModule,
     ButtonModule,
-    ListboxModule
+    ListboxModule,
   ],
   templateUrl: './dropdown-generator.component.html',
-  styleUrl: './dropdown-generator.component.scss'
+  styleUrl: './dropdown-generator.component.scss',
 })
-export class DropdownGeneratorComponent implements OnInit{
-  dropdownGroups: DropdownGroup[] = [];
+export class DropdownGeneratorComponent implements OnInit {
+  dropdownGroups: IDropdownGroup[] = [];
   newGroupName: string = '';
   newItemName: string = '';
-  selectedGroup: DropdownGroup | null = null;
+  selectedGroup: IDropdownGroup | null = null;
 
   ngOnInit(): void {
     this.loadFromLocalStorage();
@@ -45,7 +36,7 @@ export class DropdownGeneratorComponent implements OnInit{
     if (this.newGroupName.trim()) {
       this.dropdownGroups.push({
         name: this.newGroupName,
-        items: []
+        items: [],
       });
       this.newGroupName = '';
       this.saveToLocalStorage();
@@ -54,9 +45,9 @@ export class DropdownGeneratorComponent implements OnInit{
 
   addItem(): void {
     if (this.selectedGroup && this.newItemName.trim()) {
-      const newItem: DropdownItem = {
+      const newItem: IDropdownItem = {
         id: this.generateId(),
-        name: this.newItemName
+        name: this.newItemName,
       };
       this.selectedGroup.items.push(newItem);
       this.newItemName = '';
