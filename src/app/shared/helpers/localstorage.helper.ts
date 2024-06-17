@@ -14,7 +14,7 @@ export function createDefaultStorageItem(key: string): void {
       localStorage.setItem(key, '');
       break;
     case LocalStorageEnum.User:
-      localStorage.setItem(key, 'user');
+      localStorage.setItem(key, '');
       break;
   }
 }

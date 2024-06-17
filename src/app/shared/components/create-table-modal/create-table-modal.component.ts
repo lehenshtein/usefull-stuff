@@ -105,7 +105,7 @@ export class CreateTableModalComponent implements OnInit {
     }
 
     this.modalService.closeModal();
-
+    
     console.log(JSON.stringify(this.tableFormGroup.value)); // for debug
   }
 
