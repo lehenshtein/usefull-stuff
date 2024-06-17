@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -38,7 +38,7 @@ import { User } from 'firebase/auth';
   templateUrl: './create-table-modal.component.html',
   styleUrl: './create-table-modal.component.scss',
 })
-export class CreateTableModalComponent implements OnInit {
+export class CreateTableModalComponent implements OnInit, OnDestroy {
   private modalService = inject(ModalService);
   private formBuilder = inject(FormBuilder);
   private fs = inject(Firestore);
@@ -63,9 +63,15 @@ export class CreateTableModalComponent implements OnInit {
     );
     this.currentWidthType = widthTypes[1];
 
-    this.authService.user$.subscribe((user) => {
-      this.authUser = user;
-    });
+    this.authService.user$
+      .subscribe((user) => {
+        this.authUser = user;
+      })
+      .unsubscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.authService.user$
   }
 
   get columnGroups() {
@@ -105,7 +111,7 @@ export class CreateTableModalComponent implements OnInit {
     }
 
     this.modalService.closeModal();
-    
+
     console.log(JSON.stringify(this.tableFormGroup.value)); // for debug
   }
 
