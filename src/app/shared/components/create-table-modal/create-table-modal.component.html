@@ -1,0 +1,139 @@
+<form [formGroup]="tableFormGroup">
+  <div class="flex flex-column gap-2">
+    <label for="tableName" class="text-lg font-medium">Table Name</label>
+    <input pInputText id="tableName" type="text" formControlName="tableName" />
+    <small id="username-help"> Enter name of the newly created table </small>
+  </div>
+
+  <h3 class="font-medium">Table Columns</h3>
+  <p-accordion [activeIndex]="0">
+    @for (column of columnGroups.controls; track column; let index = $index) {
+    <div
+      class="flex flex-row flex-wrap sm:flex-nowrap justify-content-between align-items-center mb-2 w-full"
+    >
+      <p-accordionTab class="w-full" [header]="'Column ' + (index + 1)">
+        <form [formGroup]="asFormGroup(column)">
+          <div class="input-wrapper flex flex-row flex-wrap gap-2">
+            <div class="flex flex-column flex-1 gap-2 my-3 w-full">
+              <label for="header" class="font-medium">Header</label>
+              <input
+                pInputText
+                type="text"
+                id="header"
+                formControlName="headerName"
+              />
+              <small id="header-help"> Enter header name of this column </small>
+            </div>
+            <div class="flex flex-column flex-1 gap-2 my-3 w-full">
+              <label for="columnKey" class="font-medium">Column Key</label>
+              <input
+                pInputText
+                type="text"
+                id="columnKey"
+                formControlName="key"
+              />
+              <small id="key-help">
+                Enter key name for column value access
+              </small>
+            </div>
+          </div>
+          <div class="input-wrapper flex flex-row flex-wrap gap-2">
+            <div class="flex flex-column flex-1 gap-2 my-3 w-full">
+              <form [formGroup]="asFormGroup(column.get('width'))">
+                <div class="flex flex-column flex-1 gap-2 w-full">
+                  <label for="width" class="font-medium">Width</label>
+                  <p-inputNumber
+                    inputId="width"
+                    [suffix]="currentWidthType.suffix"
+                    [showButtons]="true"
+                    [min]="currentWidthType.minValue"
+                    [max]="currentWidthType.maxValue"
+                    [placeholder]="currentWidthType.placeholder"
+                    formControlName="value"
+                  />
+                </div>
+                <div
+                  class="flex flex-row flex-1 justify-content-center mt-3 w-full"
+                >
+                  @for (type of widthTypes; track type) {
+                  <p-radioButton
+                    [inputId]="type"
+                    [value]="type"
+                    formControlName="type"
+                    (onClick)="changeCurrentType(type)"
+                  />
+                  <label [for]="type" class="ml-2 mr-3 font-medium">
+                    {{ type }}
+                  </label>
+                  }
+                </div>
+              </form>
+            </div>
+            <div class="flex flex-column flex-1 gap-2 my-3 w-full">
+              <label for="dataTypes" class="font-medium">Data Type</label>
+              <p-dropdown
+                id="dataTypes"
+                [options]="dataTypes"
+                [showClear]="true"
+                placeholder="Select Data Type"
+                formControlName="type"
+              />
+            </div>
+          </div>
+        </form>
+      </p-accordionTab>
+      <p-button
+        class="flex ml-2"
+        label="Delete"
+        severity="danger"
+        (onClick)="deleteColumn(index)"
+      ></p-button>
+    </div>       
+        </div>
+        <div class="input-wrapper flex flex-row flex-wrap gap-2">
+          <div class="flex flex-column flex-1 gap-2 my-3 w-full">
+            <label for="width" class="font-medium">Width</label>
+            <p-inputNumber
+              inputId="width"
+              suffix="px"
+              [showButtons]="true"
+              [min]="50"
+              [max]="500"
+              placeholder="50...500px"
+              formControlName="width"
+            />
+          </div>
+          <div class="flex flex-column flex-1 gap-2 my-3 w-full">
+            <label for="dataTypes" class="font-medium">Data Type</label>
+            <p-dropdown
+              id="dataTypes"
+              [options]="dataTypes"
+              [showClear]="true"
+              placeholder="Select Data Type"
+              formControlName="type"
+            />
+          </div>
+        </div>
+      </form>
+    </p-accordionTab>
+    } @empty {
+    <h3 class="font-medium text-red-700">No columns in a table</h3>
+    }
+  </p-accordion>
+  <div
+    class="input-wrapper flex flex-row flex-wrap justify-content-between gap-2"
+  >
+    <p-button
+      class="flex mt-5"
+      label="Add Column"
+      severity="success"
+      (onClick)="addColumn()"
+    ></p-button>
+    <p-button
+      class="flex mt-5"
+      label="Create"
+      [disabled]="!isValid()"
+      (onClick)="saveTable()"
+    ></p-button>
+  </div>
+</form>
