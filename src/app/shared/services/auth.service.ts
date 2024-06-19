@@ -1,14 +1,23 @@
 import { ErrorMessageService } from './error-message.service';
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Auth,
   User,
+  authState,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  user,
 } from '@angular/fire/auth';
-import { Observable, catchError, from, map, switchMap, tap } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  from,
+  map,
+  shareReplay,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import { IAuthCredentials } from '../models/auth-credentials.interface';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageEnum } from '../enums/local-storage.enum';
@@ -27,10 +36,18 @@ export class AuthService {
   private router = inject(Router);
   private jwtHelper = new JwtHelperService();
 
-  user$ = user(this.auth);
+  user$ = authState(this.auth).pipe(
+    tap((user) => {
+      if (user && !this.token) {
+        this.setAuthToken(user);
+      }
 
-  private userSignal = signal<User | null>(null);
-  user = computed(this.userSignal);
+      if (!user && this.token) {
+        this.clearLocalStorage();
+      }
+    }),
+    shareReplay(1)
+  );
 
   get token(): string | null {
     return localStorage.getItem(LocalStorageEnum.AuthToken);
@@ -42,34 +59,18 @@ export class AuthService {
     return user ? <IUser>JSON.parse(user) : null;
   }
 
-  userChanges() {
-    this.user$
-      .pipe(
-        tap(async (user) => {
-          if (user && !this.token) {
-            const token = await user.getIdToken(true);
-            this.setToken(token);
-          }
-        })
-      )
-      .subscribe((user) => {
-        this.userSignal.set(user);
-      });
-  }
-
   setToken(token: string | null): void {
-    if (!token) {
-      return;
-    }
-
+    if (!token) return;
     localStorage.setItem(LocalStorageEnum.AuthToken, token);
   }
 
-  setUser(user: IUser | undefined): void {
-    if (!user) {
-      return;
-    }
+  private async setAuthToken(user: User): Promise<void> {
+    const token = await user.getIdToken(true);
+    this.setToken(token);
+  }
 
+  setUser(user: IUser | undefined): void {
+    if (!user) return;
     localStorage.setItem(LocalStorageEnum.User, JSON.stringify(user));
   }
 
@@ -79,9 +80,11 @@ export class AuthService {
 
   checkIfTokenIsExpired(): void {
     if (this.token && this.isTokenExpired()) {
-      this.logout().subscribe(() => {
-        this.router.navigate(['/timezones']);
-      });
+      this.logout()
+        .pipe(take(1))
+        .subscribe(() => {
+          this.router.navigate(['/timezones']);
+        });
     }
   }
 
@@ -89,13 +92,10 @@ export class AuthService {
     return from(
       createUserWithEmailAndPassword(this.auth, email, password)
     ).pipe(
-      tap(async ({ user }) => {
-        const token = await user.getIdToken(true);
-        this.setToken(token);
-      }),
       catchError((error) => {
         return this.errorMessageService.handleError(error);
       }),
+      tap(async ({ user }) => this.setAuthToken(user)),
       switchMap(({ user }) => {
         const userDoc = doc(this.fs, 'users', user.uid);
         const userData: IUser = {
@@ -110,26 +110,22 @@ export class AuthService {
             roles: [],
             uid: user.uid,
           })
-        ).pipe(map(() => userData));
+        ).pipe(
+          take(1),
+          map(() => userData)
+        );
       }),
-      tap((userData) => {
-        this.setUser(userData);
-      })
+      tap((userData) => this.setUser(userData))
     );
   }
 
   login({ email, password }: IAuthCredentials): Observable<IUser | undefined> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      tap(async ({ user }) => {
-        const token = await user.getIdToken(true);
-        this.setToken(token);
-      }),
+      tap(async ({ user }) => this.setAuthToken(user)),
       switchMap(({ user }) => {
-        return this.getUserData(user.uid);
+        return this.getUserData(user.uid).pipe(take(1));
       }),
-      tap((userData) => {
-        this.setUser(userData);
-      }),
+      tap((userData) => this.setUser(userData)),
       catchError((error) => {
         return this.errorMessageService.handleError(error);
       })
@@ -137,11 +133,7 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return from(signOut(this.auth)).pipe(
-      tap(() => {
-        this.clearLocalStorage();
-      })
-    );
+    return from(signOut(this.auth)).pipe(tap(() => this.clearLocalStorage()));
   }
 
   getUserData(uid: string): Observable<IUser | undefined> {
