@@ -22,6 +22,7 @@ import { widthTypes } from '@shared/messages/col-width-types';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { AuthService } from '@app/shared/services/auth.service';
 import { User } from 'firebase/auth';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-create-table-modal',
@@ -38,7 +39,7 @@ import { User } from 'firebase/auth';
   templateUrl: './create-table-modal.component.html',
   styleUrl: './create-table-modal.component.scss',
 })
-export class CreateTableModalComponent implements OnInit, OnDestroy {
+export class CreateTableModalComponent implements OnInit {
   private modalService = inject(ModalService);
   private formBuilder = inject(FormBuilder);
   private fs = inject(Firestore);
@@ -63,15 +64,9 @@ export class CreateTableModalComponent implements OnInit, OnDestroy {
     );
     this.currentWidthType = widthTypes[1];
 
-    this.authService.user$
-      .subscribe((user) => {
-        this.authUser = user;
-      })
-      .unsubscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.authService.user$
+    this.authService.user$.pipe(take(1)).subscribe((user) => {
+      this.authUser = user;
+    });
   }
 
   get columnGroups() {
