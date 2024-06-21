@@ -90,6 +90,10 @@ export class UserEditModalComponent implements OnInit {
     this.loading = true;
     this.editForm.disable();
 
+    this.setUserRoles(roles);
+  }
+
+  private setUserRoles(roles: UserRolesEnum[]): void {
     this.authService
       .setUserRoles(this.user()!.uid, roles)
       .pipe(take(1))
@@ -116,6 +120,6 @@ export class UserEditModalComponent implements OnInit {
   }
 
   private areArraysEqual(arr1: unknown[], arr2: unknown[]): boolean {
-    return JSON.stringify(arr1) === JSON.stringify(arr2);
+    return JSON.stringify(arr1.sort()) === JSON.stringify(arr2.sort());
   }
 }

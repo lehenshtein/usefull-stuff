@@ -36,7 +36,7 @@ export class AuthService {
   private router = inject(Router);
   private jwtHelper = new JwtHelperService();
 
-  user$ = authState(this.auth).pipe(
+  user$: Observable<User | null> = authState(this.auth).pipe(
     tap((user) => {
       if (user && !this.token) {
         this.setAuthToken(user);
@@ -55,7 +55,6 @@ export class AuthService {
 
   get savedUser(): IUser | null {
     const user = localStorage.getItem(LocalStorageEnum.User);
-
     return user ? <IUser>JSON.parse(user) : null;
   }
 
@@ -64,9 +63,12 @@ export class AuthService {
     localStorage.setItem(LocalStorageEnum.AuthToken, token);
   }
 
-  private async setAuthToken(user: User): Promise<void> {
-    const token = await user.getIdToken(true);
-    this.setToken(token);
+  private setAuthToken(user: User) {
+    from(user.getIdToken(true))
+      .pipe(take(1))
+      .subscribe((token) => {
+        this.setToken(token);
+      });
   }
 
   setUser(user: IUser | undefined): void {
@@ -95,7 +97,6 @@ export class AuthService {
       catchError((error) => {
         return this.errorMessageService.handleError(error);
       }),
-      tap(async ({ user }) => this.setAuthToken(user)),
       switchMap(({ user }) => {
         const userDoc = doc(this.fs, 'users', user.uid);
         const userData: IUser = {
@@ -121,7 +122,6 @@ export class AuthService {
 
   login({ email, password }: IAuthCredentials): Observable<IUser | undefined> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      tap(async ({ user }) => this.setAuthToken(user)),
       switchMap(({ user }) => {
         return this.getUserData(user.uid).pipe(take(1));
       }),
