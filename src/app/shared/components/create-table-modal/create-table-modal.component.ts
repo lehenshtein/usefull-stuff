@@ -44,7 +44,7 @@ export class CreateTableModalComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private fs = inject(Firestore);
   private authService = inject(AuthService);
-  authUser!: User | null;
+  authUser: User | null = null;
   keyPattern = /^[a-zA-Z0-9]+$/;
   dataTypes: string[] = [];
   widthTypes: string[] = [];
