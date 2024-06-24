@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -19,6 +19,10 @@ import { WidthTypesEnum } from '@app/shared/enums/width-types.enum';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { IColumnWidth } from '@app/shared/models/column-width.interface';
 import { widthTypes } from '@shared/messages/col-width-types';
+import { Firestore, doc, setDoc } from '@angular/fire/firestore';
+import { AuthService } from '@app/shared/services/auth.service';
+import { User } from 'firebase/auth';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-create-table-modal',
@@ -38,6 +42,9 @@ import { widthTypes } from '@shared/messages/col-width-types';
 export class CreateTableModalComponent implements OnInit {
   private modalService = inject(ModalService);
   private formBuilder = inject(FormBuilder);
+  private fs = inject(Firestore);
+  private authService = inject(AuthService);
+  authUser: User | null = null;
   keyPattern = /^[a-zA-Z0-9]+$/;
   dataTypes: string[] = [];
   widthTypes: string[] = [];
@@ -56,6 +63,10 @@ export class CreateTableModalComponent implements OnInit {
       (value) => value as WidthTypesEnum
     );
     this.currentWidthType = widthTypes[1];
+
+    this.authService.user$.pipe(take(1)).subscribe((user) => {
+      this.authUser = user;
+    });
   }
 
   get columnGroups() {
@@ -82,13 +93,20 @@ export class CreateTableModalComponent implements OnInit {
     this.columnGroups.removeAt(index);
   }
 
-  saveTable() {
-    localStorage.setItem(
-      'tableData',
-      JSON.stringify(this.tableFormGroup.value)
-    );
+  async saveTable() {
+    try {
+      if (this.authUser?.uid) {
+        const userDataDoc = doc(this.fs, 'userPrivateData', this.authUser?.uid);
+        await setDoc(userDataDoc, this.tableFormGroup.value);
+      } else {
+        console.error('User is not authenticated!');
+      }
+    } catch (error) {
+      console.error('Error when writing document:', error);
+    }
+
     this.modalService.closeModal();
-    
+
     console.log(JSON.stringify(this.tableFormGroup.value)); // for debug
   }
 
