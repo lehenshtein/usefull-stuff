@@ -88,34 +88,7 @@
         severity="danger"
         (onClick)="deleteColumn(index)"
       ></p-button>
-    </div>       
-        </div>
-        <div class="input-wrapper flex flex-row flex-wrap gap-2">
-          <div class="flex flex-column flex-1 gap-2 my-3 w-full">
-            <label for="width" class="font-medium">Width</label>
-            <p-inputNumber
-              inputId="width"
-              suffix="px"
-              [showButtons]="true"
-              [min]="50"
-              [max]="500"
-              placeholder="50...500px"
-              formControlName="width"
-            />
-          </div>
-          <div class="flex flex-column flex-1 gap-2 my-3 w-full">
-            <label for="dataTypes" class="font-medium">Data Type</label>
-            <p-dropdown
-              id="dataTypes"
-              [options]="dataTypes"
-              [showClear]="true"
-              placeholder="Select Data Type"
-              formControlName="type"
-            />
-          </div>
-        </div>
-      </form>
-    </p-accordionTab>
+    </div>
     } @empty {
     <h3 class="font-medium text-red-700">No columns in a table</h3>
     }
