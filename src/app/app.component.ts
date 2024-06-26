@@ -15,6 +15,10 @@ import { AuthService } from './shared/services/auth.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { initializeStorage } from '@shared/helpers/localstorage.helper';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { CustomTableComponent } from './shared/components/custom-table/custom-table.component';
+import { ITableData } from './shared/models/table-data.interface';
+import { ITableColumn } from './shared/models/table-column.interface';
+import { DataTypesEnum } from './shared/enums/data-types.enum';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +32,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     ToastModule,
     RippleModule,
     DialogModule,
+    CustomTableComponent,
   ],
   providers: [ModalService, DialogService],
   templateUrl: './app.component.html',
@@ -41,6 +46,8 @@ export class AppComponent implements OnInit {
 
   isLogged = toSignal(this.authService.user$);
   items: MenuItem[] = items;
+
+  tableId = 'OiMVmf3yu0cVBohLv1jeJt0EsPS2';
 
   ngOnInit(): void {
     this.authService.checkIfTokenIsExpired();

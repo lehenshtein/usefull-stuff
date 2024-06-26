@@ -1,9 +1,13 @@
+@if (table(); as table) {
+<span>table exist</span>
+} @else {
+<span>table DOES NOT exist</span>
+}
+
 <p-table
-  [columns]="columns()"
-  [value]="data()"
   styleClass="p-datatable-striped"
   (onEditInit)="editInit.emit($event)"
-  (onEditComplete)="editComplete.emit($event)"
+  (onEditComplete)="editComplete($event)"
   (onEditCancel)="editCancel.emit($event)"
 >
   <ng-template pTemplate="header" let-columns>
@@ -17,45 +21,36 @@
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr>
-      @for (col of columns; track col) { 
-        @switch (col.type) { 
-          @case (DataTypesEnum.Date) {
-            <td>{{ rowData[col.key] | date }}</td>
-          }
-          @case (DataTypesEnum.Text) {
-            <td
-              [pEditableColumn]="rowData[col.key]"
-              [pEditableColumnField]="col.key"
-            >
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="rowData[col.key]" />
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ rowData[col.key] }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-          }
-          @case (DataTypesEnum.Dropdown) {
-            <td >
-              <p-dropdown 
-                appendTo="body" 
-                [options]="rowData[col.key] | dropdownItems" 
-                optionLabel="name" 
-                optionValue="id"
-                [style]="{
+      @for (col of columns; track col) { @switch (col.type) { @case
+      (DataTypesEnum.Date) {
+      <td>{{ rowData[col.key] | date }}</td>
+      } @case (DataTypesEnum.Text) {
+      <td [pEditableColumn]="rowData[col.key]" [pEditableColumnField]="col.key">
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text" [(ngModel)]="rowData[col.key]" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{ rowData[col.key] }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      } @case (DataTypesEnum.Dropdown) {
+      <td>
+        <p-dropdown
+          appendTo="body"
+          [options]="rowData[col.key] | dropdownItems"
+          optionLabel="name"
+          optionValue="id"
+          [style]="{
                   width: '100%',
                 }"
-              ></p-dropdown>
-            </td>
-          }
-          @default {
-            <td>{{ rowData[col.key] }}</td>
-          } 
-        } 
-      } @empty {
-        <td>There are no items.</td>
+        ></p-dropdown>
+      </td>
+      } @default {
+      <td>{{ rowData[col.key] }}</td>
+      } } } @empty {
+      <td>There are no items.</td>
       }
     </tr>
   </ng-template>
