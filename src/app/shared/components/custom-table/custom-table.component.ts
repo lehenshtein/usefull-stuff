@@ -23,6 +23,7 @@ import {
 } from 'primeng/table';
 import { ITableColumn } from '@app/shared/models/table-column.interface';
 import { DropdownModule } from 'primeng/dropdown';
+import { SkeletonModule } from 'primeng/skeleton';
 import { DropdownItemsPipe } from '@app/shared/pipes/dropdown-items.pipe';
 import { Firestore, doc, docData } from '@angular/fire/firestore';
 import { ITable } from '@app/shared/models/table.interface';
@@ -32,8 +33,10 @@ import {
   from,
   map,
   of,
+  shareReplay,
   switchMap,
   take,
+  tap,
   throwError,
 } from 'rxjs';
 import {
@@ -51,6 +54,7 @@ import {
     FormsModule,
     DropdownModule,
     DropdownItemsPipe,
+    SkeletonModule,
   ],
   templateUrl: './custom-table.component.html',
   styleUrl: './custom-table.component.scss',
@@ -61,30 +65,45 @@ export class CustomTableComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private authService = inject(AuthService);
 
-  private user = toSignal(this.authService.user$);
-
   // editComplete = output<TableEditCompleteEvent>();
-  editCancel = output<TableEditCancelEvent>();
-  editInit = output<TableEditInitEvent>();
+  // editCancel = output<TableEditCancelEvent>();
+  // editInit = output<TableEditInitEvent>();
 
+  loading = signal<boolean>(false);
   tableId = input.required<string>();
 
-  table = toSignal<ITable | undefined>(
+  table = toSignal(
     toObservable(this.tableId).pipe(
+      tap(() => this.loading.set(true)),
       switchMap((id) => {
-        return this.authService.user$.pipe(map((user) => ({ user, id })));
+        return this.authService.user$.pipe(
+          map((user) => {
+            return { id, user };
+          })
+        );
       }),
-      switchMap(({ user, id }) => {
-        const userId = user?.uid;
-
-        if (userId !== id) {
+      switchMap(({ id, user }) => {
+        if (!user) {
           return of(undefined);
         }
 
-        const userDoc = doc(this.fs, 'userPrivateData', id);
-        return docData(userDoc) as Observable<ITable>;
+        const userDataDoc = doc(this.fs, 'userPrivateData', user.uid);
+        return (<Observable<{ tables: ITable[] }>>docData(userDataDoc)).pipe(
+          map((data) => {
+            if (!data) {
+              return undefined;
+            }
+
+            const table = data.tables.find((table) => {
+              return table.id === id;
+            });
+            return table;
+          })
+        );
       }),
-      takeUntilDestroyed(this.destroyRef)
+      tap(() => this.loading.set(false)),
+      takeUntilDestroyed(this.destroyRef),
+      shareReplay(1)
     )
   );
 
@@ -92,16 +111,11 @@ export class CustomTableComponent implements OnInit {
     return DataTypesEnum;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loading.set(true);
+  }
 
   editComplete(e: TableEditCompleteEvent): void {
     console.log('edit complete: ', e);
-  }
-
-  private areObjectsEqual(x: object, y: object): boolean {
-    return (
-      JSON.stringify(Object.entries(x).sort()) !==
-      JSON.stringify(Object.entries(y).sort())
-    );
   }
 }

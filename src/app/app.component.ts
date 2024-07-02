@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
   isLogged = toSignal(this.authService.user$);
   items: MenuItem[] = items;
 
-  tableId = 'OiMVmf3yu0cVBohLv1jeJt0EsPS2';
+  tableId = 'asdhasi12037';
 
   ngOnInit(): void {
     this.authService.checkIfTokenIsExpired();
