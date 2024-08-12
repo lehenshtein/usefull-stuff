@@ -6,4 +6,5 @@ export interface ITable {
   data?: ITableData[];
   name: string;
   id: string;
+  uid?: string;
 }

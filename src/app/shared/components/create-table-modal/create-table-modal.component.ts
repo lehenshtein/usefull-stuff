@@ -110,13 +110,15 @@ export class CreateTableModalComponent implements OnInit {
 
         if (docSnap.exists()) {
           currentTables = (docSnap.get('tables') as ITable[]) || [];
-          currentTables.push(this.setNewTable(userDataRef));
+          currentTables.push(
+            this.setNewTable(userDataRef, this.UIDGenerator())
+          );
           await updateDoc(userDataRef, {
             tables: currentTables,
           });
         } else {
           await setDoc(userDataRef, {
-            tables: [this.setNewTable(userDataRef)],
+            tables: [this.setNewTable(userDataRef, this.UIDGenerator())],
           });
         }
       } else {
@@ -154,12 +156,25 @@ export class CreateTableModalComponent implements OnInit {
     }
   }
 
-  private setNewTable(userDataRef: DocumentReference): ITable {
+  private setNewTable(userDataRef: DocumentReference, uid?: string): ITable {
     return {
       columns: this.tableFormGroup.value.columnFormGroups,
       name: this.tableFormGroup.value.tableName,
       id: userDataRef.id,
+      uid: uid,
       data: [],
     } as ITable;
+  }
+
+  private UIDGenerator() {
+    let uid = '';
+    let code = () => {
+      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    };
+
+    for (let i = 0; i < 5; i++) {
+      uid += code();
+    }
+    return uid;
   }
 }
