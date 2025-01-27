@@ -23,6 +23,13 @@ import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { AuthService } from '@app/shared/services/auth.service';
 import { User } from 'firebase/auth';
 import { take } from 'rxjs';
+import { ITable } from '@app/shared/models/table.interface';
+import {
+  DocumentReference,
+  addDoc,
+  getDoc,
+  updateDoc,
+} from 'firebase/firestore';
 
 @Component({
   selector: 'app-create-table-modal',
@@ -49,6 +56,7 @@ export class CreateTableModalComponent implements OnInit {
   dataTypes: string[] = [];
   widthTypes: string[] = [];
   currentWidthType!: IColumnWidth;
+  table!: ITable;
 
   tableFormGroup = this.formBuilder.group({
     tableName: ['', Validators.required],
@@ -96,8 +104,23 @@ export class CreateTableModalComponent implements OnInit {
   async saveTable() {
     try {
       if (this.authUser?.uid) {
-        const userDataDoc = doc(this.fs, 'userPrivateData', this.authUser?.uid);
-        await setDoc(userDataDoc, this.tableFormGroup.value);
+        const userDataRef = doc(this.fs, 'userPrivateData', this.authUser?.uid);
+        const docSnap = await getDoc(userDataRef);
+        let currentTables = [];
+
+        if (docSnap.exists()) {
+          currentTables = (docSnap.get('tables') as ITable[]) || [];
+          currentTables.push(
+            this.setNewTable(userDataRef, this.UIDGenerator())
+          );
+          await updateDoc(userDataRef, {
+            tables: currentTables,
+          });
+        } else {
+          await setDoc(userDataRef, {
+            tables: [this.setNewTable(userDataRef, this.UIDGenerator())],
+          });
+        }
       } else {
         console.error('User is not authenticated!');
       }
@@ -131,5 +154,27 @@ export class CreateTableModalComponent implements OnInit {
         this.currentWidthType = widthTypes[1];
         break;
     }
+  }
+
+  private setNewTable(userDataRef: DocumentReference, uid?: string): ITable {
+    return {
+      columns: this.tableFormGroup.value.columnFormGroups,
+      name: this.tableFormGroup.value.tableName,
+      id: userDataRef.id,
+      uid: uid,
+      data: [],
+    } as ITable;
+  }
+
+  private UIDGenerator() {
+    let uid = '';
+    let code = () => {
+      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    };
+
+    for (let i = 0; i < 5; i++) {
+      uid += code();
+    }
+    return uid;
   }
 }
